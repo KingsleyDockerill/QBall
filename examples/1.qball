@@ -1,0 +1,13 @@
+((An example QBall program.
+This will create a function(outarg) that will output 
+a single argument.))
+
+_outarg a;
+  out a;
+end $ This can all be done on one line, but for readibility it will be on multiple
+
+$ Support for floating points, strings, ints, and lists
+outarg "Hello, world!"
+outarg 5
+outarg 5.5
+outarg ["Hello, world!", "Hello, again!"]

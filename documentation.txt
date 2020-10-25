@@ -1,0 +1,36 @@
+Hello, world! Program:
+  By the end of this you will be able to print multiple values and decide what seperates them. 
+  First thing you should learn is how to create a string. To declare a string, either type one single quote or one double quote. Then type the value you want your string to be equal to. Finally, end it with a single quote (if you used one at the start) or double quote (if you used one at the start). Creating that on it's own won't do anything, but it can be put in a variable or passed as an arguement. Try typing this string into the shell:
+  "Hello, world!"
+  One cool thing you can do with strings is use an escape character. The escape character in QBall is a backslash. If a certain character is behind the backslash the section will be replaced. These are examples of everthing you can do with escape characters.
+  /" or /':
+    This simple inserts the quote you put behind the backslash into the string. Normally a quote of the same type of the start breaks the string and reads the rest as a function. For instance
+    "Jack said "Hello, world!""
+    will raise an error, but
+    "Jack said \"Hello, world\""
+    will work. You could also do
+    'Jack said "Hello, world!"'
+  \t:
+    Replaces the \t with a tab
+  \n:
+    Replaces the \n with a newline
+  \b:
+    Gets rid of the character before it
+  \ + number:
+    Inserts an amount of spaces equal to the number. For instance
+    "\5"
+    would be equivelent to 5 spaces
+  \\:
+    Inserts a \
+  \ + anything else:
+    As long as the \ is not beside one of the characters above,
+    it will output the \ and the next character.
+  Now it's time for the interesting part; outputting a string into the console. In QBall, the command to output information is called "out". It takes an unlimited amount of arguements, meaning you can output an infinite number of data. This is how you put Hello, world! in the console:
+  out "Hello, world!"
+  But what if you want to output multiple strings combined? Well you just have to pass more than one arguement. For instance
+  out "Hello," "world!"
+  will put Hello, world! in the console. But what if you don't want a space? What if you want to insert a newline between each string? Well you can just add this line:
+  out "Hello," "world!" sep="\n"
+  sep is short for seperator, and can be replaced with any string. You can also output numbers like shown below:
+  out 5 5.5 -5
+  It can be any number, it doesn't matter. Numbers can also be joined together.
