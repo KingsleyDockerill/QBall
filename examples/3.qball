@@ -1,0 +1,9 @@
+_cls;
+  sys "clear";
+end
+cls;
+out "Hello, world!";
+slp 3;
+cls;
+out "Hello, again!";
+cls;

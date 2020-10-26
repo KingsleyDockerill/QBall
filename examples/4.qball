@@ -1,0 +1,8 @@
+global a;
+global b;
+out "Enter some QBall code: " newline=False;
+in a;
+out "Enter some Python code: " newline=False;
+in b;
+qstr a
+py b
