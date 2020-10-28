@@ -1,8 +1,8 @@
 global a;
 global b;
-out "Enter some QBall code: " newline=False;
+out "Enter some QBall code: " newline=0;
 in a;
-out "Enter some Python code: " newline=False;
+out "Enter some Python code: " newline=0;
 in b;
 qstr a
 py b

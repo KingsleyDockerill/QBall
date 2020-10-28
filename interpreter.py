@@ -60,6 +60,25 @@ class interpreter:
     elif self.tok.value in local_vars:
       value = local_vars[self.tok.value]
       self.advance()
+    elif self.tok.value.lower() == "math":
+      mathstr = ""
+      self.advance()
+      while self.tok is not None and self.tok.type != token.TokenTypes.semi:
+        if self.tok.type == token.TokenTypes.addition:
+          mathstr += "+"
+        elif self.tok.type == token.TokenTypes.subtraction:
+          mathstr += "-"
+        elif self.tok.type == token.TokenTypes.multiply:
+          mathstr += "*"
+        elif self.tok.type == token.TokenTypes.divide:
+          mathstr += "/"
+        elif self.tok.type in (token.TokenTypes.integer, token.TokenTypes.floating):
+          mathstr += str(self.tok.value)
+        else:
+          raise Exception("Illegal math operator!")
+        self.advance()
+      self.advance()
+      value = eval(mathstr)
     elif self.tok.type == token.TokenTypes.lbrack:
       self.advance()
       value = []
@@ -90,40 +109,31 @@ class interpreter:
     global arg
     while self.tok is not None:
       if self.tok.type == token.TokenTypes.builtin:
-        if self.tok.value.lower() == "out":
+        if self.tok.value == "out":
           self.advance()
           to_print = []
           sep = " "
+          newline = 1
           while self.tok is not None and self.tok.type is not token.TokenTypes.semi:
-            if self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote):
+            if self.tok.value == "sep":
               self.advance()
-              to_print.append(self.tok.value)
-              self.advance()
-              self.advance()
-            elif self.tok.value in global_vars:
-              to_print.append(str(global_vars[self.tok.value]))
-              self.advance()
-            elif self.tok.value in local_vars:
-              to_print.append(str(local_vars[self.tok.value]))
-              self.advance()
-            elif self.tok.value == "sep":
-              self.advance()
-              if self.tok.type == token.TokenTypes.equal:
+              if self.tok is not None and self.tok.type == token.TokenTypes.equal:
                 self.advance()
-                if self.tok.value in global_vars:
-                  sep = global_vars[self.tok.value]
-                  self.advance()
-                elif self.tok.type in (token.TokenTypes.squote,token.TokenTypes.dquote):
-                  self.advance()
-                  sep = self.tok.value
-                  self.advance()
-                  self.advance()
-            elif self.tok.type in (token.TokenTypes.integer, token.TokenTypes.floating):
-              to_print.append(str(self.tok.value))
+                sep = self.arg()
+              else:
+                to_print.append(sep)
+                self.advance()
+            elif self.tok.value == "newline":
               self.advance()
+              if self.tok is not None and self.tok.type == token.TokenTypes.equal:
+                self.advance()
+                newline = self.arg()
+              else:
+                to_print.append(newline)
+                self.advance()
             else:
-              raise Exception("Illegal arguement to out")
-          print(sep.join(to_print))
+              to_print.append(self.arg())
+          print(sep.join(to_print), end="\n" if newline else "")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
         elif self.tok.value.lower() == "global":

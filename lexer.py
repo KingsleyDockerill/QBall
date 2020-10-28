@@ -1,5 +1,6 @@
 from tokens import token
 from string import digits
+from copy import copy
 
 WHITESPACE = " \n"
 
@@ -41,7 +42,7 @@ class lexer:
       elif self.char == "=":
         self.tokens.append(token.Result(token.TokenTypes.equal))
         self.advance()
-      elif self.char in digits or self.char == "." or self.char == "-":
+      elif self.char in digits or self.char == "." or self.char == "#":
         a = self.generate_number()
         if type(a) == int:
           self.tokens.append(token.Result(token.TokenTypes.integer, a))
@@ -62,6 +63,18 @@ class lexer:
           self.advance()
         else:
           raise Exception("( only used in message")
+      elif self.char == "+":
+        self.advance()
+        self.tokens.append(token.Result(token.TokenTypes.plus))
+      elif self.char == "-":
+        self.advance()
+        self.tokens.append(token.Result(token.TokenTypes.minus))
+      elif self.char == "*":
+        self.advance()
+        self.tokens.append(token.Result(token.TokenTypes.multiply))
+      elif self.char == "/":
+        self.advance()
+        self.tokens.append(token.Result(token.TokenTypes.divide))
       else:
         result = token.Result(token.TokenTypes.builtin, self.generate_function())
         if self.char is not None and self.char not in "=;[]":
@@ -115,11 +128,10 @@ class lexer:
       if self.char in digits + "-" and val_type != "float":
         val_type = "integer"
         num += self.char
-        self.advance()
       elif self.char == "." or val_type == "float":
         val_type = "float"
         num += self.char
-        self.advance()
+      self.advance()
     if val_type == "integer":
       return int(num)
     elif val_type == "float":
