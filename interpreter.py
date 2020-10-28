@@ -74,6 +74,10 @@ class interpreter:
           mathstr += "/"
         elif self.tok.type in (token.TokenTypes.integer, token.TokenTypes.floating):
           mathstr += str(self.tok.value)
+        elif self.tok.value in global_vars and type(global_vars[self.tok.value]) == int:
+          mathstr += str(global_vars[self.tok.value])
+        elif self.tok.value in local_vars and type(local_vars[self.tok.value]) == int:
+          mathstr += str(local_vars[self.tok.value])
         else:
           raise Exception("Illegal math operator!")
         self.advance()
