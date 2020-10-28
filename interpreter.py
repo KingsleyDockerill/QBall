@@ -64,9 +64,9 @@ class interpreter:
       mathstr = ""
       self.advance()
       while self.tok is not None and self.tok.type != token.TokenTypes.semi:
-        if self.tok.type == token.TokenTypes.addition:
+        if self.tok.type == token.TokenTypes.plus:
           mathstr += "+"
-        elif self.tok.type == token.TokenTypes.subtraction:
+        elif self.tok.type == token.TokenTypes.minus:
           mathstr += "-"
         elif self.tok.type == token.TokenTypes.multiply:
           mathstr += "*"
@@ -119,7 +119,7 @@ class interpreter:
               self.advance()
               if self.tok is not None and self.tok.type == token.TokenTypes.equal:
                 self.advance()
-                sep = self.arg()
+                sep = str(self.arg())
               else:
                 to_print.append(sep)
                 self.advance()
@@ -132,7 +132,7 @@ class interpreter:
                 to_print.append(newline)
                 self.advance()
             else:
-              to_print.append(self.arg())
+              to_print.append(str(self.arg()))
           print(sep.join(to_print), end="\n" if newline else "")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
