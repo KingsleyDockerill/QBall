@@ -16,6 +16,15 @@ class TokenTypes(Enum):
   equal = 12
   lbrack = 13
   rbrack = 14
+  and_ = 15
+  or_ = 16
+  xor = 17
+  greater = 18
+  less = 19
+  greatere = 20
+  lesse = 21
+  lparen = 22
+  rparen = 23
 
 class Result:
   def __init__(self, type, value=None):

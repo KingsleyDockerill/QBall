@@ -32,5 +32,19 @@ Hello, world! Program:
   will put Hello, world! in the console. But what if you don't want a space? What if you want to insert a newline between each string? Well you can just add this line:
   out "Hello," "world!" sep="\n"
   sep is short for seperator, and can be replaced with any string. You can also output numbers like shown below:
-  out 5 5.5 -5
-  It can be any number, it doesn't matter. Numbers can also be joined together.
+  out 5 5.5 #5
+  Note that instead of a - for negatives you use a #. It can be any number, it doesn't matter. Numbers can also be joined together.
+math:
+  Math in QBall is quite simple. It has all your average operators (+, -, *, /, **, //) along with operators for bit manipulation (&, |, ^, <, >). This is a guide to all bit manipulation in QBall:
+  < = leftshift, formatted # < #
+  > = rightshift, formatted # > #
+  & = AND, formatted # & #
+  | = OR, formatted # | #
+  ^ = XOR, formatted # ^ #
+  But how do you use these in QBall? Like this:
+  out math 5 + 5;
+  You can do any mathematical eqution. Make sure you include the semicolon. This is so you can do this:
+  out math 5 + 5; "Hello, world!"
+  Without the semicolon you will get the error:
+  "Illegal math operator!"
+  math will work as an argument for any function

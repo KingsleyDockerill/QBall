@@ -62,7 +62,8 @@ class lexer:
           self.generate_multiline_message()
           self.advance()
         else:
-          raise Exception("( only used in message")
+          self.tokens.append(token.Result(token.TokenTypes.lparen))
+          self.advance()
       elif self.char == "+":
         self.advance()
         self.tokens.append(token.Result(token.TokenTypes.plus))
@@ -75,6 +76,32 @@ class lexer:
       elif self.char == "/":
         self.advance()
         self.tokens.append(token.Result(token.TokenTypes.divide))
+      elif self.char == "&":
+        self.tokens.append(token.Result(token.TokenTypes.and_))
+        self.advance()
+      elif self.char == "|":
+        self.tokens.append(token.Result(token.TokenTypes.or_))
+        self.advance()
+      elif self.char == "^":
+        self.tokens.append(token.Result(token.TokenTypes.xor))
+        self.advance()
+      elif self.char == "<":
+        self.advance()
+        if self.char != "=":
+          self.tokens.append(token.Result(token.TokenTypes.less))
+        else:
+          self.tokens.append(token.Result(token.TokenTypes.lesse))
+          self.advance()
+      elif self.char == ">":
+        self.advance()
+        if self.char != "=":
+          self.tokens.append(token.Result(token.TokenTypes.greater))
+        else:
+          self.tokens.append(token.Result(token.TokenTypes.greatere))
+          self.advance()
+      elif self.char == ")":
+        self.tokens.append(token.Result(token.TokenTypes.rparen))
+        self.advance()
       else:
         result = token.Result(token.TokenTypes.builtin, self.generate_function())
         if self.char is not None and self.char not in "=;[]":

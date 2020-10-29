@@ -72,6 +72,20 @@ class interpreter:
           mathstr += "*"
         elif self.tok.type == token.TokenTypes.divide:
           mathstr += "/"
+        elif self.tok.type == token.TokenTypes.and_:
+          mathstr += "&"
+        elif self.tok.type == token.TokenTypes.or_:
+          mathstr += "|"
+        elif self.tok.type == token.TokenTypes.xor:
+          mathstr += "^"
+        elif self.tok.type == token.TokenTypes.greater:
+          mathstr += ">>"
+        elif self.tok.type == token.TokenTypes.less:
+          mathstr += "<<"
+        elif self.tok.type == token.TokenTypes.lparen:
+          mathstr += "("
+        elif self.tok.type == token.TokenTypes.rparen:
+          mathstr += ")"
         elif self.tok.type in (token.TokenTypes.integer, token.TokenTypes.floating):
           mathstr += str(self.tok.value)
         elif self.tok.value in global_vars and type(global_vars[self.tok.value]) == int:
