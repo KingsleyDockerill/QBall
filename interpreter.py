@@ -134,7 +134,7 @@ class interpreter:
         else:
           raise Exception("Illegal math operator!")
         self.advance()
-      self.advance()
+      self.advance() if not self.func else print(end="")
       value = eval(mathstr)
     elif self.tok.value == "os":
       self.advance()
@@ -154,7 +154,6 @@ class interpreter:
       while self.tok is not None and self.tok.type != token.TokenTypes.rbrack:
         a = self.arg()
         value.append(a)
-        self.advance()
       self.advance()
     elif self.tok.type == token.TokenTypes.and_:
       self.advance()
@@ -226,7 +225,7 @@ class interpreter:
             value = self.arg()
             self.advance() if self.tok is not None and self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("Must have ; or EOF after variable decleration")
+            raise Exception("Must have ; or EOF after global variable decleration")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
           global_vars.add(name, value)
@@ -241,7 +240,7 @@ class interpreter:
             value = self.arg()
             self.advance() if self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("Must have ; or EOF after variable decleration")
+            raise Exception("Must have ; or EOF after local variable decleration")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
           local_vars.add(name, value)
@@ -349,11 +348,11 @@ class interpreter:
           self.advance()
           a = self.arg()
           os.system(a)
-          if self.tok.type in (token.TokenTypes.squote, token.TokenTypes.dquote):
+          if self.tok is not None and self.tok.type in (token.TokenTypes.squote, token.TokenTypes.dquote):
             self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("No ; or EOL")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+          if self.tok is not None:
             self.advance()
         elif self.tok.value == "id":
           # This is the equivelent of "out &var"
@@ -402,7 +401,6 @@ class interpreter:
             raise Exception("Expected ; or EOL")
           if self.tok is not None:
             self.advance()
-          continue
         elif self.tok.value == "return" and self.func:
           self.advance()
           name = self.tok.value

@@ -48,3 +48,15 @@ math:
   Without the semicolon you will get the error:
   "Illegal math operator!"
   math will work as an argument for any function
+variables:
+  Variables in QBall are simple. For now you only have to worry about global variables. A variable points to a value. For instance you could create a variable x that is equal to 5. If you do
+  out x
+  it would be the same as
+  out 5
+  You declare variables using the following: 
+  global a = 5;
+  This would create a variable, a, equal to 5. You can set a variable equal to an type, such as an int, floating point, string, and more. Here are examples:
+  global a = 1;
+  global b = 1.1;
+  global c = "1";
+  global d = math 5 + 5;

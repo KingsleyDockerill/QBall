@@ -3,8 +3,8 @@ import interpreter
 
 while True:
   command = input(">>> ")
-  if command[:3] == "run ":
-    command = open(f"{command[3:]}")
+  if command[:4] == "run ":
+    command = open(f"{command[4:]}.qball").read()
   try:
     result = lexer.lexer(command).generate_tokens()
     interpret = interpreter.interpreter(result)
