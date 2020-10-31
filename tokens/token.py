@@ -1,6 +1,7 @@
 from enum import Enum
 
 class TokenTypes(Enum):
+  eof = -1
   builtin = 0
   plus = 1
   minus = 2
@@ -25,6 +26,8 @@ class TokenTypes(Enum):
   lesse = 21
   lparen = 22
   rparen = 23
+  iequal = 24
+  nequal = 25
 
 class Result:
   def __init__(self, type, value=None):

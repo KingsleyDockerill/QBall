@@ -3,10 +3,15 @@ import interpreter
 
 while True:
   command = input(">>> ")
-  if command[:4] == "run ":
-    command = open(f"{command[4:]}.qball").read()
+  if command[:3] == "run ":
+    command = open(f"{command[3:]}")
   try:
     result = lexer.lexer(command).generate_tokens()
-    interpreter.interpreter(result).interpret()
+    interpret = interpreter.interpreter(result)
+    pos = interpret.pos
+    interpret.interpret()
   except Exception as e:
-    print(f"\033[91m{e}\033[00m")
+    try:
+      print(f"\033[91mError at line {pos.line} starting at char {pos.char}: {e}\033[00m")
+    except NameError:
+      print(f"\033[91mLexer error: {e}\033[00m")

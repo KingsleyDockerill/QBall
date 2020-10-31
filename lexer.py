@@ -40,8 +40,11 @@ class lexer:
         self.tokens.append(token.Result(token.TokenTypes.semi))
         self.advance()
       elif self.char == "=":
-        self.tokens.append(token.Result(token.TokenTypes.equal))
         self.advance()
+        if self.char == "=":
+          self.tokens.append(token.Result(token.TokenTypes.iequal))
+        else:
+          self.tokens.append(token.Result(token.TokenTypes.equal))
       elif self.char in digits or self.char == "." or self.char == "#":
         a = self.generate_number()
         if type(a) == int:

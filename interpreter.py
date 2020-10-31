@@ -3,6 +3,7 @@ import check
 from copy import deepcopy
 import lexer
 import os
+import time
 
 class dictionary(dict):
   def __init__(self):
@@ -17,12 +18,27 @@ class dictionary(dict):
     except KeyError:
       pass
 
-class object():
+class object:
   def __init__(self, args: list, funcs: list):
     self.args = args
     self.funcs = funcs
     self.local = dictionary()
     self.global_ = dictionary()
+
+class os_obj:
+  def __init__(self):
+    self.name = os.name
+  def mkdir(self, directory):
+    os.mkdir(directory)
+  def rename(self, path, name):
+    os.rename(path, name)
+  def exists(self, path):
+    return os.path.exists(path)
+
+class pos:
+  def __init__(self):
+    self.char = 0
+    self.line = 0
 
 global_vars = dictionary()
 local_vars = dictionary()
@@ -31,17 +47,25 @@ arg = dictionary()
 argvars = dictionary()
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "elif", "else"]
+EOF = -1
 
 class interpreter:
-  def __init__(self, toks, func=False):
+  def __init__(self, toks, func=False, class_=False, classname=""):
     self.toks = iter(toks)
     self.func = func
+    self.class_ = class_
+    self.classname = classname
+    self.pos = pos()
+    self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
   def advance(self):
     try:
+      self.pos.char += len(str(self.tok.value)) if self.tok is not None and self.tok.value is not None else 1
       self.tok = next(self.toks)
     except StopIteration:
+      self.pos.char = EOF
+      self.pos.line = EOF
       self.tok = None
 
   def arg(self):
@@ -57,10 +81,25 @@ class interpreter:
     elif self.tok.value in global_vars:
       value = global_vars[self.tok.value]
       self.advance()
+      if type(value) == os_obj:
+        # cmp using f string to prevent TypeError
+        if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
+          value = os_obj()
+        elif self.tok.value == "name":
+          value = os_obj().name
+          self.advance()
+        elif self.tok.value == "exists":
+          self.advance()
+          value = os_obj().exists(path=self.arg())
+          self.advance()
     elif self.tok.value in local_vars:
       value = local_vars[self.tok.value]
       self.advance()
-    elif self.tok.value.lower() == "math":
+    elif self.tok.value == "True":
+      value = 1
+    elif self.tok.value == "False":
+      value = 0
+    elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()
       while self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -97,6 +136,18 @@ class interpreter:
         self.advance()
       self.advance()
       value = eval(mathstr)
+    elif self.tok.value == "os":
+      self.advance()
+      # cmp using f string to prevent TypeError
+      if self.tok is None or f"{self.tok.value}" not in ("name", "exists"):
+        value = os_obj()
+      elif self.tok.value == "name":
+        value = os_obj().name
+        self.advance()
+      elif self.tok.value == "exists":
+        self.advance()
+        value = os_obj().exists(path=self.arg())
+        self.advance()
     elif self.tok.type == token.TokenTypes.lbrack:
       self.advance()
       value = []
@@ -105,6 +156,9 @@ class interpreter:
         value.append(a)
         self.advance()
       self.advance()
+    elif self.tok.type == token.TokenTypes.and_:
+      self.advance()
+      value = id(self.arg())
     else:
       raise Exception("Illegal argument")
     return value
@@ -123,9 +177,16 @@ class interpreter:
       self.advance()
     return toks
 
+  def condition(self):
+    toks = []
+    while self.tok is not None and self.tok.type != token.TokenTypes.semi:
+      toks.append(self.tok.value)
+      
   def interpret(self):
     global arg
     while self.tok is not None:
+      self.pos.char = 1
+      self.pos.line += 1
       if self.tok.type == token.TokenTypes.builtin:
         if self.tok.value == "out":
           self.advance()
@@ -245,6 +306,18 @@ class interpreter:
               raise Exception("Cannot have var1 as a value, must be variable")
           else:
             raise Exception("var2 must be a variable, not a value")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("free takes one arguement only")
+          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            self.advance()
+        elif self.tok.value == "slp":
+          self.advance()
+          a = self.arg()
+          time.sleep(a)
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("free takes one arguement only")
+          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            self.advance()
         elif self.tok.value == "str":
           self.advance()
           if self.tok.value in global_vars:

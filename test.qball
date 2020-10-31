@@ -1,0 +1,11 @@
+_len a b;
+  local c = 0;
+  for i in a;
+    out math c + 1;
+    local c = math c + 1;;
+  end
+  return c b;
+end
+global d = 0;
+len "EHllo, rowld" d;
+out d

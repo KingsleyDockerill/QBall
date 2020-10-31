@@ -2,7 +2,7 @@
 
 _iterarg a;
   for i in a;
-    out a;
+    out i;
   end
 end
 
