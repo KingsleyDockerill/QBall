@@ -1,0 +1,17 @@
+_len a b;
+  local c = 0;
+  for _ in a;
+    local c = math c + 1;
+  end
+  return b c;
+end
+
+global data = [os name os exists "main.py"];
+out data;
+global length = 0;
+len data length;
+out length;
+global string = "Hello, world!";
+out string;
+len string length;
+out length

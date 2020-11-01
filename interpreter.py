@@ -35,6 +35,9 @@ class os_obj:
   def exists(self, path):
     return os.path.exists(path)
 
+class FunctionReturn(Exception):
+  pass
+
 class pos:
   def __init__(self):
     self.char = 0
@@ -151,10 +154,10 @@ class interpreter:
     elif self.tok.type == token.TokenTypes.lbrack:
       self.advance()
       value = []
-      while self.tok is not None and self.tok.type != token.TokenTypes.rbrack:
+      while self.tok is not None and self.tok.type != token.TokenTypes.rbrack and self.tok.type != token.TokenTypes.semi:
         a = self.arg()
         value.append(a)
-      self.advance()
+      self.advance() if self.tok.type != token.TokenTypes.semi else print(end="")
     elif self.tok.type == token.TokenTypes.and_:
       self.advance()
       value = id(self.arg())
@@ -225,8 +228,8 @@ class interpreter:
             value = self.arg()
             self.advance() if self.tok is not None and self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("Must have ; or EOF after global variable decleration")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            raise Exception("No ; or EOL")
+          if self.tok is not None:
             self.advance()
           global_vars.add(name, value)
         elif self.tok.value.lower() == "local" and self.func is True:
@@ -240,8 +243,8 @@ class interpreter:
             value = self.arg()
             self.advance() if self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("Must have ; or EOF after local variable decleration")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            raise Exception("No ; or EOL")
+          if self.tok is not None:
             self.advance()
           local_vars.add(name, value)
         elif self.tok.value.lower() == "local":
@@ -262,7 +265,10 @@ class interpreter:
             else:
               value = self.arg()
             local_vars.add(i, value)
-          interpreter(function[funcname], True).interpret()
+          try:
+            interpreter(function[funcname], True).interpret()
+          except FunctionReturn:
+            pass
           for i in arg[funcname]:
             local_vars.remove(i)
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -405,6 +411,7 @@ class interpreter:
           self.advance()
           name = self.tok.value
           globalv = True if argvars[name][0] == "global" else False
+          name = argvars[name][1]
           self.advance()
           val = self.arg()
           if globalv:
@@ -416,6 +423,7 @@ class interpreter:
             raise Exception("Expected ; or EOL")
           if self.tok is not None:
             self.advance()
+          raise FunctionReturn
         elif self.tok.value == "return":
           raise Exception("return outside of function")
         elif self.tok.value == "import":

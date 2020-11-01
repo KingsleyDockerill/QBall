@@ -1,0 +1,16 @@
+*dictionary keys values;
+  $ Both keys and values are lists
+  global keys = keys;
+  global values = values;
+_dictionary:get key ret
+;
+  $ Get the key key's value and return it to ret
+  local c;
+  for i in keys;
+    if i == key;
+      break;
+    end
+    c += 1;
+  end
+  return ret values[c];
+end
