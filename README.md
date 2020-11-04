@@ -37,7 +37,6 @@ import QBall
 # The following code runs evaluate's argument as QBall code
 QBall.evaluate("out 'Hello, world!'")
 # This adds the kwargs to the global variables
-# THIS DOES NOT CURRENTLY WORK. A FIX WILL BE OUT IN 0.5.6
 QBall.global_add(a=5)
 # This will work
 QBall.evaluate("out a")
