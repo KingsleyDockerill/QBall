@@ -2,9 +2,8 @@
   $ Both keys and values are lists
   global keys = keys;
   global values = values;
-_dictionary:get key ret
-;
-  $ Get the key key's value and return it to ret
+_dictionary:get key;
+  $ Get the key key's value and return it
   local c;
   for i in keys;
     if i == key;
@@ -12,5 +11,5 @@ _dictionary:get key ret
     end
     c += 1;
   end
-  return ret values[c];
+  return values[c];
 end

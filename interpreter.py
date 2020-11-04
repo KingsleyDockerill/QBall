@@ -5,6 +5,7 @@ import lexer
 import os
 import time
 import re
+import socket
 
 class dictionary(dict):
   def __init__(self):
@@ -43,6 +44,14 @@ class regex_obj:
     self.string = string
     self.regex = regex
 
+class client_obj:
+  def __init__(self):
+    self.ip = socket.gethost(socket.gethostname())
+
+class server_obj:
+  def __init__(self):
+    self.ip = socket.gethostbyname(socket.gethostname())
+
 class FunctionReturn(Exception):
   pass
 
@@ -56,7 +65,7 @@ local_vars = dictionary()
 function = dictionary()
 arg = dictionary()
 argvars = dictionary()
-using = {"os": False, "regex": False}
+using = {"os": False, "regex": False, "server": False, "client": False}
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "elif", "else"]
 EOF = -1
@@ -150,8 +159,7 @@ class interpreter:
       value = eval(mathstr)
     elif using["os"] and self.tok.value == "os":
       self.advance()
-      # cmp using f string to prevent TypeError
-      if self.tok is None or f"{self.tok.value}" not in ("name", "exists"):
+      if self.tok is None or self.tok.value == token.TokenTypes.semi:
         value = os_obj()
       elif self.tok.value == "name":
         value = os_obj().name
@@ -160,15 +168,24 @@ class interpreter:
         self.advance()
         value = os_obj().exists(path=self.arg())
         self.advance()
+      else:
+        raise Exception(f"os object has no attribute {self.tok.value}")
     elif using["regex"] and self.tok.value == "regex":
       self.advance()
       regex = regex_obj(self.arg(), self.arg())
-      if self.tok.value == "findall":
+      if self.tok is None or self.tok.value == token.TokenTypes.semi:
+        value = os_obj()
+      elif self.tok.value == "findall":
         value = re.findall(regex.regex, regex.string)
         self.advance()
       elif self.tok.value == "search":
         value = re.search(regex.regex, regex.string)
         self.advance()
+      elif self.tok.value == "sub":
+        value = re.sub(regex.regex, regex.string)
+        self.advance()
+      else:
+        raise Exception(f"regex object has no atrribute {self.tok.value}")
     elif self.tok.value in using:
       raise Exception(f"""Did you mean do add
   using {self.tok.value}
@@ -369,7 +386,7 @@ to your program?""")
               self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("No EOL")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+          if self.tok is not None:
             self.advance()
         elif self.tok.value == "int":
           self.advance()
@@ -379,39 +396,22 @@ to your program?""")
           elif self.tok.value in local_vars:
               local_vars[self.tok.value] = int(global_vars[self.tok.value])
               self.advance()
-          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("No EOL")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
-            self.advance()
-        elif self.tok.value == "search":
-          self.advance()
-          regex = self.arg()
-          string = self.arg()
-          if self.tok in global_vars:
-            global_vars[self.tok.value] = re.search(regex, string)
-          else:
-            local_vars[self.tok.value] = re.search(regex, string)
-          self.advance()
-          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("No EOL")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
-            self.advance()
-        elif self.tok.value == "findall":
-          self.advance()
-          regex = self.arg()
-          string = self.arg()
-          if self.tok in global_vars:
-            global_vars[self.tok.value] = re.findall(regex, string)
-          else:
-            local_vars[self.tok.value] = re.findall(regex, string)
-          self.advance()
-          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+          if self.tok is not None:
             raise Exception("No EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
         elif self.tok.value == "type":
-          # Do this tomorrow
-          pass
+          self.advance()
+          typefind = self.arg()
+          if self.tok.value in local_vars:
+            local_vars[self.tok.value] = type(typefind)
+          else:
+            global_vars[self.tok.value] = type(typefind)
+          self.advance()
+          if self.tok is not None:
+            raise Exception("No EOL")
+          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            self.advance()
         elif self.tok.value == "sys":
           self.advance()
           a = self.arg()
@@ -476,10 +476,10 @@ to your program?""")
           name = argvars[name][1]
           self.advance()
           val = self.arg()
-          if globalv:
-            global_vars[name] = val
-          else:
+          if not globalv:
             local_vars[name] = val
+          else:
+            global_vars[name] = val
           self.advance()
           if self.tok is not None and self.tok.type != self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected ; or EOL")
