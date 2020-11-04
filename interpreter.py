@@ -4,6 +4,7 @@ from copy import deepcopy
 import lexer
 import os
 import time
+import re
 
 class dictionary(dict):
   def __init__(self):
@@ -34,6 +35,13 @@ class os_obj:
     os.rename(path, name)
   def exists(self, path):
     return os.path.exists(path)
+  def makefile(self, filename, mode="r"):
+    return open(filename, mode)
+
+class regex_obj:
+  def __init__(self, string, regex):
+    self.string = string
+    self.regex = regex
 
 class FunctionReturn(Exception):
   pass
@@ -48,6 +56,7 @@ local_vars = dictionary()
 function = dictionary()
 arg = dictionary()
 argvars = dictionary()
+using = {"os": False, "regex": False}
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "elif", "else"]
 EOF = -1
@@ -84,7 +93,7 @@ class interpreter:
     elif self.tok.value in global_vars:
       value = global_vars[self.tok.value]
       self.advance()
-      if type(value) == os_obj:
+      if type(value) == os_obj and using["os"]:
         # cmp using f string to prevent TypeError
         if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
           value = os_obj()
@@ -139,7 +148,7 @@ class interpreter:
         self.advance()
       self.advance() if not self.func else print(end="")
       value = eval(mathstr)
-    elif self.tok.value == "os":
+    elif using["os"] and self.tok.value == "os":
       self.advance()
       # cmp using f string to prevent TypeError
       if self.tok is None or f"{self.tok.value}" not in ("name", "exists"):
@@ -151,6 +160,19 @@ class interpreter:
         self.advance()
         value = os_obj().exists(path=self.arg())
         self.advance()
+    elif using["regex"] and self.tok.value == "regex":
+      self.advance()
+      regex = regex_obj(self.arg(), self.arg())
+      if self.tok.value == "findall":
+        value = re.findall(regex.regex, regex.string)
+        self.advance()
+      elif self.tok.value == "search":
+        value = re.search(regex.regex, regex.string)
+        self.advance()
+    elif self.tok.value in using:
+      raise Exception(f"""Did you mean do add
+  using {self.tok.value}
+to your program?""")
     elif self.tok.type == token.TokenTypes.lbrack:
       self.advance()
       value = []
@@ -215,7 +237,9 @@ class interpreter:
             else:
               to_print.append(str(self.arg()))
           print(sep.join(to_print), end="\n" if newline else "")
-          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
             self.advance()
         elif self.tok.value.lower() == "global":
           self.advance()
@@ -249,6 +273,14 @@ class interpreter:
           local_vars.add(name, value)
         elif self.tok.value.lower() == "local":
           raise Exception("Local outside of function")
+        elif self.tok.value.lower() == "using":
+          self.advance()
+          using[self.tok.value] = True
+          self.advance()
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
         elif self.tok.value in function:
           funcname = self.tok.value
           self.advance()
@@ -323,6 +355,10 @@ class interpreter:
             raise Exception("free takes one arguement only")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
+        elif self.tok.value == "raise":
+          self.advance()
+          exception = self.arg()
+          raise Exception(exception)
         elif self.tok.value == "str":
           self.advance()
           if self.tok.value in global_vars:
@@ -343,6 +379,32 @@ class interpreter:
           elif self.tok.value in local_vars:
               local_vars[self.tok.value] = int(global_vars[self.tok.value])
               self.advance()
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("No EOL")
+          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            self.advance()
+        elif self.tok.value == "search":
+          self.advance()
+          regex = self.arg()
+          string = self.arg()
+          if self.tok in global_vars:
+            global_vars[self.tok.value] = re.search(regex, string)
+          else:
+            local_vars[self.tok.value] = re.search(regex, string)
+          self.advance()
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("No EOL")
+          if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+            self.advance()
+        elif self.tok.value == "findall":
+          self.advance()
+          regex = self.arg()
+          string = self.arg()
+          if self.tok in global_vars:
+            global_vars[self.tok.value] = re.findall(regex, string)
+          else:
+            local_vars[self.tok.value] = re.findall(regex, string)
+          self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("No EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
