@@ -57,11 +57,6 @@ class server_obj:
 class FunctionReturn(Exception):
   pass
 
-class pos:
-  def __init__(self):
-    self.char = 0
-    self.line = 0
-
 global_vars = dictionary()
 local_vars = dictionary()
 function = dictionary()
@@ -78,17 +73,15 @@ class interpreter:
     self.func = func
     self.class_ = class_
     self.classname = classname
-    self.pos = pos()
+    self.section = 1
     self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
   def advance(self):
     try:
-      self.pos.char += len(str(self.tok.value)) if self.tok is not None and self.tok.value is not None else 1
       self.tok = next(self.toks)
     except StopIteration:
-      self.pos.char = EOF
-      self.pos.line = EOF
+      self.section = EOF
       self.tok = None
 
   def arg(self):
@@ -241,8 +234,6 @@ to your program?""")
   def interpret(self):
     global arg
     while self.tok is not None:
-      self.pos.char = 1
-      self.pos.line += 1
       if self.tok.type == token.TokenTypes.builtin:
         if self.tok.value == "out":
           self.advance()
@@ -639,3 +630,4 @@ to your program?""")
         self.advance()
       else:
         raise Exception("Illegal token")
+      self.section += 1
