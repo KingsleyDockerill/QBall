@@ -35,7 +35,6 @@ class lexer:
         self.tokens.append(token.Result(token.TokenTypes.string, self.generate_string("'")))
         self.advance()
         self.tokens.append(token.Result(token.TokenTypes.squote))
-        self.advance()
       elif self.char == ";":
         self.tokens.append(token.Result(token.TokenTypes.semi))
         self.advance()
@@ -43,6 +42,7 @@ class lexer:
         self.advance()
         if self.char == "=":
           self.tokens.append(token.Result(token.TokenTypes.iequal))
+          self.advance()
         else:
           self.tokens.append(token.Result(token.TokenTypes.equal))
       elif self.char in digits or self.char == "." or self.char == "#":
@@ -105,6 +105,13 @@ class lexer:
       elif self.char == ")":
         self.tokens.append(token.Result(token.TokenTypes.rparen))
         self.advance()
+      elif self.char == "!":
+        self.advance()
+        if self.char == "=":
+          self.tokens.append(token.Result(token.TokenTypes.nequal))
+          self.advance()
+        else:
+          self.tokens.append(token.Result(token.TokenTypes.exclamation))
       else:
         result = token.Result(token.TokenTypes.builtin, self.generate_function())
         if self.char is not None and self.char not in "=;[]":

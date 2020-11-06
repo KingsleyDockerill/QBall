@@ -6,4 +6,5 @@ out "Hello, world!";
 slp 3;
 cls;
 out "Hello, again!";
+slp 3;
 cls;

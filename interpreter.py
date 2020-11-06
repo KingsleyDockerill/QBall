@@ -1,4 +1,5 @@
 from tokens import token
+import lexer
 import check
 from copy import deepcopy
 import lexer
@@ -6,6 +7,7 @@ import os
 import time
 import re
 import socket
+import threading
 
 class dictionary(dict):
   def __init__(self):
@@ -102,7 +104,7 @@ class interpreter:
     elif self.tok.value in global_vars:
       value = global_vars[self.tok.value]
       self.advance()
-      if type(value) == os_obj and using["os"]:
+      if using["os"] and type(value) == os_obj:
         # cmp using f string to prevent TypeError
         if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
           value = os_obj()
@@ -182,7 +184,8 @@ class interpreter:
         value = re.search(regex.regex, regex.string)
         self.advance()
       elif self.tok.value == "sub":
-        value = re.sub(regex.regex, regex.string)
+        self.advance()
+        value = re.sub(regex.regex, self.arg(), regex.string)
         self.advance()
       else:
         raise Exception(f"regex object has no atrribute {self.tok.value}")
@@ -219,9 +222,21 @@ to your program?""")
     return toks
 
   def condition(self):
-    toks = []
+    cond = ""
     while self.tok is not None and self.tok.type != token.TokenTypes.semi:
-      toks.append(self.tok.value)
+      if self.tok.type == token.TokenTypes.iequal:
+        cond += "=="
+        self.advance()
+      elif self.tok.type == token.TokenTypes.nequal:
+        cond += "!="
+        self.advance()
+      elif self.tok.type == token.TokenTypes.exclamation:
+        cond += "not "
+        self.advance()
+      else:
+        temp = self.arg()
+        cond += f"'{temp}'" if type(temp) == str else str(temp)
+    return eval(cond)
       
   def interpret(self):
     global arg
@@ -248,12 +263,24 @@ to your program?""")
               if self.tok is not None and self.tok.type == token.TokenTypes.equal:
                 self.advance()
                 newline = self.arg()
+                self.advance() if self.tok.value is not None else print(end="")
               else:
                 to_print.append(newline)
                 self.advance()
             else:
               to_print.append(str(self.arg()))
           print(sep.join(to_print), end="\n" if newline else "")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value == "in":
+          self.advance()
+          if self.tok in local_vars:
+            local_vars[self.tok.value] = input()
+          else:
+            global_vars[self.tok.value] = input()
+          self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected EOL")
           if self.tok is not None:
@@ -298,6 +325,26 @@ to your program?""")
             raise Exception("Expected EOL")
           if self.tok is not None:
             self.advance()
+        elif self.tok.value == "if":
+          self.advance()
+          a = self.condition()
+          self.advance()
+          toks = []
+          while self.tok is not None and self.tok.value != "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              toks.append(self.tok)
+              self.advance()
+          self.advance()
+          if a:
+            interpreter(toks).interpret()
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
         elif self.tok.value in function:
           funcname = self.tok.value
           self.advance()
@@ -324,6 +371,20 @@ to your program?""")
             raise Exception("Expected ; or EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
+        elif self.tok.value == "thread":
+          self.advance()
+          funcname = self.tok.value
+          self.advance()
+          argstr = ""
+          while self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            a = self.arg()
+            if type(a) != str:
+              argstr += str(a)
+            else:
+              argstr += f"'{a}'"
+            argstr += " "
+          tokens = lexer.lexer(f"{funcname} {argstr}").generate_tokens()
+          threading.Thread(interpreter(tokens).interpret()).start()
         elif self.tok.value == "free":
           self.advance()
           if self.tok.value in global_vars:
@@ -531,6 +592,8 @@ to your program?""")
           self.advance()
           arg = self.arg()
           x = compile(arg, "python", "exec")
+          # For some unknown reason for py "" code to run you must call it somewhere first. Deleting this single line of code will break this function
+          x
           exec(x)
           self.advance()
           if self.tok is not None and self.tok.type != self.tok.type != token.TokenTypes.semi:

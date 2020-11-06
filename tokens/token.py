@@ -28,6 +28,7 @@ class TokenTypes(Enum):
   rparen = 23
   iequal = 24
   nequal = 25
+  exclamation = 26
 
 class Result:
   def __init__(self, type, value=None):
