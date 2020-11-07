@@ -1,10 +1,19 @@
-using os;
-using regex;
+$ If error occurs, print it out
 
-_cls;
-  if os name == 'posix';
-    sys "clear";
+try;
+  using os;
+  using regex;
+
+  _cls;
+    if os name == "nt";
+      sys "cls";
+      slp 5;
+    else;
+      sys "clear";
+      slp 5;
+    end
   end
-end
 
-cls;
+  cls;
+except e;
+  out e

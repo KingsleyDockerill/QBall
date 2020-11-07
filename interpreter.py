@@ -8,6 +8,7 @@ import time
 import re
 import socket
 import threading
+import requests
 
 class dictionary(dict):
   def __init__(self):
@@ -54,6 +55,12 @@ class server_obj:
   def __init__(self):
     self.ip = socket.gethostbyname(socket.gethostname())
 
+class requests_obj:
+  def __init__(self):
+    pass
+  def post(self):
+    pass
+
 class FunctionReturn(Exception):
   pass
 
@@ -64,7 +71,7 @@ arg = dictionary()
 argvars = dictionary()
 using = {"os": False, "regex": False, "server": False, "client": False}
 # All reserved keywords that use "end"
-ends = ["for", "while", "if", "elif", "else"]
+ends = ["for", "while", "if", "try"]
 EOF = -1
 
 class interpreter:
@@ -73,7 +80,7 @@ class interpreter:
     self.func = func
     self.class_ = class_
     self.classname = classname
-    self.section = 1
+    self.section = 0
     self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
@@ -107,7 +114,33 @@ class interpreter:
         elif self.tok.value == "exists":
           self.advance()
           value = os_obj().exists(path=self.arg())
+      elif using["regex"] and type(value) == regex_obj:
+        self.advance()
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          raise Exception("regex requires 2 arguments")
+        regex = regex_obj(self.arg(), self.arg())
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          value = regex_obj()
+        elif self.tok.value == "findall":
+          value = re.findall(regex.regex, regex.string)
           self.advance()
+        elif self.tok.value == "search":
+          value = re.search(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "sub":
+          self.advance()
+          value = re.sub(regex.regex, self.arg(), regex.string)
+          self.advance()
+        else:
+          raise Exception(f"regex object has no atrribute   {self.tok.value}")
+      elif type(value) == list:
+        string = "["
+        for i in value:
+          if type(i) == str:
+            string += f"'{i}' "
+          else:
+            string += str(i)
+        value = string + "\b]"
     elif self.tok.value in local_vars:
       value = local_vars[self.tok.value]
       self.advance()
@@ -162,14 +195,15 @@ class interpreter:
       elif self.tok.value == "exists":
         self.advance()
         value = os_obj().exists(path=self.arg())
-        self.advance()
       else:
         raise Exception(f"os object has no attribute {self.tok.value}")
     elif using["regex"] and self.tok.value == "regex":
       self.advance()
+      if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          raise Exception("regex expects 2 arguments")
       regex = regex_obj(self.arg(), self.arg())
-      if self.tok is None or self.tok.value == token.TokenTypes.semi:
-        value = os_obj()
+      if self.tok is None or self.tok.type == token.TokenTypes.semi:
+        value = regex
       elif self.tok.value == "findall":
         value = re.findall(regex.regex, regex.string)
         self.advance()
@@ -223,8 +257,27 @@ to your program?""")
       elif self.tok.type == token.TokenTypes.nequal:
         cond += "!="
         self.advance()
+      elif self.tok.value == "in":
+        cond += "in "
+        self.advance()
       elif self.tok.type == token.TokenTypes.exclamation:
-        cond += "not "
+        self.advance()
+        if self.tok is not None and self.tok.type == token.TokenTypes.builtin and self.tok.value == "in":
+          cond += "not in "
+          self.advance()
+        else:
+          cond += "not "
+      elif self.tok.type == token.TokenTypes.greater:
+        cond += ">"
+        self.advance()
+      elif self.tok.type == token.TokenTypes.less:
+        cond += "<"
+        self.advance()
+      elif self.tok.type == token.TokenTypes.greatere:
+        cond += ">="
+        self.advance()
+      elif self.tok.type == token.TokenTypes.lesse:
+        cond += "<="
         self.advance()
       else:
         temp = self.arg()
@@ -234,6 +287,7 @@ to your program?""")
   def interpret(self):
     global arg
     while self.tok is not None:
+      self.section += 1
       if self.tok.type == token.TokenTypes.builtin:
         if self.tok.value == "out":
           self.advance()
@@ -321,7 +375,7 @@ to your program?""")
           a = self.condition()
           self.advance()
           toks = []
-          while self.tok is not None and self.tok.value != "end":
+          while self.tok is not None and self.tok.value != "end" and self.tok.value != "else":
             if self.tok.value in ends:
               e = self.ends_in_func()
               for i in e:
@@ -329,13 +383,61 @@ to your program?""")
             else:
               toks.append(self.tok)
               self.advance()
+          elsetoks = []
+          if self.tok is not None and self.tok.value == "else":
+            self.advance()
+            if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+              raise Exception("Expected ; after else")
+            self.advance()
+            while self.tok is not None and self.tok.value != "end":
+              if self.tok.value in ends:
+                e = self.ends_in_func()
+                for i in e:
+                  elsetoks.append(i)
+              else:
+                elsetoks.append(self.tok)
+                self.advance()
           self.advance()
           if a:
             interpreter(toks).interpret()
+          elif not a:
+            interpreter(elsetoks).interpret()
+        elif self.tok.value == "try":
+          self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("Expected EOL")
+            raise Exception("No ; after try")
           if self.tok is not None:
             self.advance()
+          trytoks = []
+          while self.tok is not None and self.tok.value != "except":
+            trytoks.append(self.tok)
+            self.advance()
+          self.advance()
+          name = ""
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            name = self.tok.value
+            self.advance()
+            if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+              raise Exception("No ; after except")
+          if self.tok is not None:
+            self.advance()
+          tokexcept = []
+          while self.tok is not None and self.tok.value != "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              tokexcept.append(self.tok)
+              self.advance()
+          self.advance()
+          try:
+            interpreter(trytoks).interpret()
+          except Exception as e:
+            if name:
+              local_vars.add(name, e)
+            interpreter(tokexcept).interpret()
+            local_vars.remove(name)
         elif self.tok.value in function:
           funcname = self.tok.value
           self.advance()
@@ -630,4 +732,3 @@ to your program?""")
         self.advance()
       else:
         raise Exception("Illegal token")
-      self.section += 1

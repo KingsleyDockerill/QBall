@@ -60,3 +60,44 @@ variables:
   global b = 1.1;
   global c = "1";
   global d = math 5 + 5;
+input:
+  To get input in QBall you use the builtin "in". It takes one argument, a variable name, and stores it in that variable. If the variable doesn't exists, it creates it.
+  Example:
+    in a;
+    out a
+  This would take in input, store it in a new variable a, and then output it. Keep in mind you can run all of these programs in one line (for the shell you would use this; in a; out a unless you do each on seperate lines of input)
+functions:
+  To declare functions in QBall you have to use the _ token. Then you type the function name and then each argument until a semicolon. The following is an example of a function outarg that takes one argument, a
+  _outarg a;
+  Next you declare the body of the function:
+  _outarg a;
+    out a;
+  Then, finally, you end it off with the end keyword
+  _outarg a;
+    out a;
+  end
+  Now you can call this function from anywhere in your program like so
+  outarg "Hello, world!"
+  would output
+  Hello, world!
+if and else statements:
+  If statement's syntax in QBall are similiar to functions. An example:
+    if "Hi" == "Hi";
+      $ Code
+    end
+  To use an else statement:
+    if "Hi" != "Hi";
+      $ Code
+    else;
+      $ Code
+    end
+  Notice there's only one end in that, after the else statement. These are the operators you can use:
+  ==
+  !=
+  <=
+  >=
+  >
+  <
+  in
+  !in
+  !

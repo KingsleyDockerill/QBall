@@ -24,6 +24,19 @@ _remove a b;
   end
   return a d;
 end
+_insert a b c;
+  $ insert a at point b and return it to c
+  local c = 0;
+  local new = [];
+  for i in a;
+    if c == b;
+      append new b;
+      c += 2;
+    else;
+      c += 1;
+    end 
+  end
+end
 _clear a;
   $ Return var a [];
   return a [];
