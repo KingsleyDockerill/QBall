@@ -1,5 +1,4 @@
 from tokens import token
-import lexer
 import check
 from copy import deepcopy
 import lexer
@@ -9,6 +8,7 @@ import re
 import socket
 import threading
 import requests
+import string
 
 class dictionary(dict):
   def __init__(self):
