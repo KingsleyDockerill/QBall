@@ -4,7 +4,7 @@
 
 By the end of this you will be able to print multiple values and decide what seperates them. First thing you should learn is how to create a string. To declare a string, either type one single quote or one double quote. Then type the value you want your string to be equal to. Finally, end it with a single quote (if you used one at the start) or double quote (if you used one at the start). Creating that on it's own won't do anything, but it can be put in a variable or passed as an arguement. Try typing this string into the shell:
 
-```py
+```
 "Hello, world!"
 ```
 
@@ -20,19 +20,19 @@ One cool thing you can do with strings is use an escape character. The escape ch
 
 :x:
 
-```py
+```
    "Jack said "Hello, world!""
 ```
 
 :white_check_mark:
 
-```py
+```
 "Jack said \"Hello, world\""
 ```
 
 **OR**
 
-```py
+```
 'Jack said "Hello, world!"'
 ```
 
@@ -47,20 +47,20 @@ One cool thing you can do with strings is use an escape character. The escape ch
 
 > Now it's time for the interesting part; outputting a string into the console. In QBall, the command to output information is called `out`. It takes an unlimited amount of arguements, meaning you can output an infinite number of data. This is how you log Hello, world! in the console:
 
-```py
+```
  out "Hello, world!"
 ```
 
 But what if you want to output multiple strings combined? Well you just have to pass more than one arguement. For instance `out "Hello," "world!"` will put Hello, world! in the console. But what if you don't want a space? What if you want to insert a newline between each string? Well you can just add this line:
 
-```py
+```
  out "Hello," "world!" sep="\n"
 ```
 
 > Sep is short for seperator, and can be replaced with any string.
 > You can also output numbers like shown below:
 
-```py
+```
  out 5 5.5 #5
 ```
 
@@ -71,7 +71,7 @@ But what if you want to output multiple strings combined? Well you just have to 
 Math in QBall is quite simple. It has all your average operators (`+, -, *, /, **, //`) along with operators for bit manipulation (`&, |, ^, <, >`).
 This is a guide to all bit manipulation in QBall:
 
-```py
+```
  < = leftshift, formatted # < #
  > = rightshift, formatted # > #
  & = AND, formatted # & #
@@ -81,13 +81,13 @@ This is a guide to all bit manipulation in QBall:
 
 But how do you use these in QBall? Like this:
 
-```py
+```
 out math 5 + 5;
 ```
 
 You can do any mathematical eqution. Make sure you include the semicolon. This is so you can do this:
 
-```py
+```
 out math 5 + 5; "Hello, world!"
 ```
 
@@ -104,14 +104,14 @@ A variable points to a value. For instance you could create a variable x that is
 
 You declare variables using the following:
 
-```py
+```
 global a = 5;
 ```
 
 This would create a variable named `a` with the value `5`. You can set a variable equal to an type, such as an int, floating point, string, and more.
 Here are more examples:
 
-```py
+```
 global a = 1;
 global b = 1.1;
 global c = "1";
@@ -121,7 +121,7 @@ global d = math 5 + 5;
 ## Input
 
 To get input in QBall you use the builtin "in". It takes one argument, a variable name, and stores it in that variable. If the variable doesn't exists, it creates it.
-```py
+```
 in a;
 out a
 ```
@@ -131,23 +131,23 @@ This would take in input, store it in a new variable a, and then output it. Keep
 ## Functions
 
 To declare functions in QBall you have to use the `\_` token. Then you type the function name and then each argument until a semicolon. The following is an example of a function outarg that takes one argument, `a`
-```py
-\_outarg a;
+```
+_outarg a;
 ```
 Next you declare the body of the function:
-```py
-\_outarg a;
+```
+_outarg a;
 out a;
 ```
 Then, finally, you end it off with the end keyword
-```py
-\_outarg a;
+```
+_outarg a;
 out a;
 end
 ```
 
 Now you can call this function from anywhere in your program like this:
-```py
+```
 outarg "Hello, world!"
 would output
 Hello, world!
