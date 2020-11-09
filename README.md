@@ -17,7 +17,7 @@ outarg "Hello, world!";
 # Docs
 Everything you need to know is in documentation.txt
 # Contribute
-Go here to contribute: https://repl.it/@qballlang/QBall
+Fork this to run the QBall shell: https://repl.it/@qballlang/QBall
 Changes are commited 8:00 PM EST every day I can
 # Trello board
 The official Trello board: https://trello.com/b/cJM6HsR3/qball
