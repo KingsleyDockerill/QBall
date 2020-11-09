@@ -111,8 +111,17 @@ class interpreter:
       value = self.tok.value
       self.advance()
     elif self.tok.value in global_vars:
-      value = global_vars[self.tok.value]
+      name = self.tok.value
       self.advance()
+      if self.tok.type == token.TokenTypes.lbrack:
+        self.advance()
+        index = self.arg()
+        if self.tok.type != token.TokenTypes.rbrack:
+          raise Exception("Expected [index]")
+        self.advance()
+      else:
+        value = global_vars[name]
+      value = global_vars[name][index]
       if using["os"] and type(value) == os_obj:
         # cmp using f string to prevent TypeError
         if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
