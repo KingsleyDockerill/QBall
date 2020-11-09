@@ -432,6 +432,16 @@ to your program?""")
             raise Exception("Expected EOL")
           if self.tok is not None:
             self.advance()
+        elif self.tok.value in global_vars:
+          name = self.tok.value
+          self.advance()
+          if self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            global_vars[name] = self.arg()
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
         elif self.tok.value == "if":
           self.advance()
           a = self.condition()
