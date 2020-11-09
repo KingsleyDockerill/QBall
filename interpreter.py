@@ -67,6 +67,12 @@ class FunctionReturn(Exception):
 class IllegalBreak(Exception):
   pass
 
+class GlobalVar:
+  pass
+
+class LocalVar:
+  pass
+
 global_vars = dictionary()
 local_vars = dictionary()
 function = dictionary()
@@ -235,6 +241,8 @@ to your program?""")
       value = id(self.arg())
     else:
       raise Exception("Illegal argument")
+    if type(value) != str and str(value) == "True":
+      value = 1
     return value
 
   # Since both functions and if/for/etc use end, this handles that
@@ -307,6 +315,7 @@ to your program?""")
               i += 1
             else:
               cond += "not "
+              i += 1
           elif temp[i].type == token.TokenTypes.greater:
             cond += ">"
             i += 1
@@ -319,9 +328,20 @@ to your program?""")
           elif temp[i].type == token.TokenTypes.lesse:
             cond += "<="
             i += 1
+          else:
+            raise Exception("")
         except:
-          cond += f"'{temp[i]}'" if type(temp[i]) == str else str(temp[i])
-          i += 1
+          if type(temp[i]) == GlobalVar:
+            i += 1
+            cond += str(global_vars[temp[i]])
+            i += 1
+          elif type(temp[i]) == LocalVar:
+            i += 1
+            cond += str(local_vars[temp[i]])
+            i += 1
+          else:
+            cond += f"'{temp[i]}'" if type(temp[i]) == str else str(temp[i])
+            i += 1
     return eval(cond)
       
   def interpret(self):
@@ -449,12 +469,22 @@ to your program?""")
           conditional = []
           while self.tok.type != token.TokenTypes.semi:
             try:
-              conditional.append(self.arg())
+              if self.tok.value in global_vars:
+                conditional.append(GlobalVar())
+                conditional.append(self.tok.value)
+                self.advance()
+              elif self.tok.value in local_vars:
+                conditional.append(LocalVar())
+                conditional.append(self.tok.value)
+                self.advance()
+              else:
+                a = self.arg()
+                conditional.append(a)
             except:
               conditional.append(self.tok)
               self.advance()
-          a = self.condition(conditional)
           self.advance()
+          a = self.condition(conditional)
           toks = []
           while self.tok is not None and self.tok.value != "end":
             if self.tok.value in ends:
@@ -468,6 +498,76 @@ to your program?""")
           while a:
             interpreter(toks).interpret()
             a = self.condition(conditional)
+        elif self.tok.value == "until":
+          self.advance()
+          conditional = []
+          while self.tok.type != token.TokenTypes.semi:
+            try:
+              if self.tok.value in global_vars:
+                conditional.append(GlobalVar())
+                conditional.append(self.tok.value)
+                self.advance()
+              elif self.tok.value in local_vars:
+                conditional.append(LocalVar())
+                conditional.append(self.tok.value)
+                self.advance()
+              else:
+                a = self.arg()
+                conditional.append(a)
+            except:
+              conditional.append(self.tok)
+              self.advance()
+          self.advance()
+          a = self.condition(conditional)
+          toks = []
+          while self.tok is not None and self.tok.value != "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              toks.append(self.tok)
+              self.advance()
+          self.advance()
+          while not a:
+            interpreter(toks).interpret()
+            a = self.condition(conditional)
+        elif self.tok.value == "try":
+          self.advance()
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("No ; after try")
+          if self.tok is not None:
+            self.advance()
+          trytoks = []
+          while self.tok is not None and self.tok.value != "except":
+            trytoks.append(self.tok)
+            self.advance()
+          self.advance()
+          name = ""
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            name = self.tok.value
+            self.advance()
+            if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+              raise Exception("No ; after except")
+          if self.tok is not None:
+            self.advance()
+          tokexcept = []
+          while self.tok is not None and self.tok.value != "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              tokexcept.append(self.tok)
+              self.advance()
+          self.advance()
+          try:
+            interpreter(trytoks).interpret()
+          except Exception as e:
+            if name:
+              local_vars.add(name, e)
+            interpreter(tokexcept).interpret()
+            local_vars.remove(name)
         elif self.tok.value == "try":
           self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
