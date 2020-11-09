@@ -1,4 +1,3 @@
-out "hello world!"
 for i in "Hello, world!";
   if i == "!";
     break;
