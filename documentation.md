@@ -130,7 +130,7 @@ This would take in input, store it in a new variable a, and then output it. Keep
 
 ## Functions
 
-To declare functions in QBall you have to use the `\_` token. Then you type the function name and then each argument until a semicolon. The following is an example of a function outarg that takes one argument, `a`
+To declare functions in QBall you have to use the `_` token. Then you type the function name and then each argument until a semicolon. The following is an example of a function outarg that takes one argument, `a`
 ```
 _outarg a;
 ```

@@ -119,9 +119,9 @@ class interpreter:
         if self.tok.type != token.TokenTypes.rbrack:
           raise Exception("Expected [index]")
         self.advance()
+        value = global_vars[name][index]
       else:
         value = global_vars[name]
-      value = global_vars[name][index]
       if using["os"] and type(value) == os_obj:
         # cmp using f string to prevent TypeError
         if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
