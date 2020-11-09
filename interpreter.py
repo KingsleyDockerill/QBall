@@ -2,7 +2,6 @@ from tokens import token
 import lexer
 import check
 from copy import deepcopy
-import lexer
 import os
 import time
 import re

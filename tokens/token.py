@@ -1,5 +1,6 @@
 from enum import Enum
 
+# This is the definition of all token types. These are visually represented as TokenTypes.type, .type beong .eof, .builtin, etc
 class TokenTypes(Enum):
   eof = -1
   builtin = 0
@@ -30,6 +31,8 @@ class TokenTypes(Enum):
   nequal = 25
   exclamation = 26
 
+# An example representation of the token's type (which is in the above Enum) and a value (which defaults to None)
+# In the interpreter you constantly reference .value and .type
 class Result:
   def __init__(self, type, value=None):
     self.type = type
