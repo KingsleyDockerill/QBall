@@ -438,6 +438,20 @@ to your program?""")
           if self.tok.type == token.TokenTypes.equal:
             self.advance()
             global_vars[name] = self.arg()
+          elif self.tok.type == token.TokenTypes.lbrack:
+            self.advance()
+            index = self.arg()
+            if self.tok.type != token.TokenTypes.rbrack:
+              raise Exception("Expected [index]")
+            self.advance()
+            if self.tok.type != token.TokenTypes.equal:
+              raise Exception("Expected [index] = arg")
+            self.advance()
+            a = self.arg()
+            try:
+              global_vars[name][index] = a
+            except:
+              global_vars[name].insert(index, a)
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected EOL")
           if self.tok is not None:
