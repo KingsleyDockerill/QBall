@@ -1,19 +1,7 @@
-$ If error occurs, print it out
-
-try;
-  using os;
-  using regex;
-
-  _cls;
-    if os name == "nt";
-      sys "cls";
-      slp 5;
-    else;
-      sys "clear";
-      slp 5;
-    end
+for i in "Hello, world!";
+  if i == "!";
+    break;
+  else;
+    out i;
   end
-
-  cls;
-except e;
-  out e
+end

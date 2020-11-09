@@ -64,6 +64,9 @@ class requests_obj:
 class FunctionReturn(Exception):
   pass
 
+class IllegalBreak(Exception):
+  pass
+
 global_vars = dictionary()
 local_vars = dictionary()
 function = dictionary()
@@ -248,40 +251,77 @@ to your program?""")
       self.advance()
     return toks
 
-  def condition(self):
+  def condition(self, temp=[]):
     cond = ""
-    while self.tok is not None and self.tok.type != token.TokenTypes.semi:
-      if self.tok.type == token.TokenTypes.iequal:
-        cond += "=="
-        self.advance()
-      elif self.tok.type == token.TokenTypes.nequal:
-        cond += "!="
-        self.advance()
-      elif self.tok.value == "in":
-        cond += "in "
-        self.advance()
-      elif self.tok.type == token.TokenTypes.exclamation:
-        self.advance()
-        if self.tok is not None and self.tok.type == token.TokenTypes.builtin and self.tok.value == "in":
-          cond += "not in "
+    if len(temp) < 1:
+      del temp
+      while self.tok is not None and self.tok.type != token.TokenTypes.semi:
+        if self.tok.type == token.TokenTypes.iequal:
+          cond += "=="
+          self.advance()
+        elif self.tok.type == token.TokenTypes.nequal:
+          cond += "!="
+          self.advance()
+        elif self.tok.value == "in":
+          cond += "in "
+          self.advance()
+        elif self.tok.type == token.TokenTypes.exclamation:
+          self.advance()
+          if self.tok is not None and self.tok.type == token.TokenTypes.builtin and self.tok.value == "in":
+            cond += "not in "
+            self.advance()
+          else:
+            cond += "not "
+        elif self.tok.type == token.TokenTypes.greater:
+          cond += ">"
+          self.advance()
+        elif self.tok.type == token.TokenTypes.less:
+          cond += "<"
+          self.advance()
+        elif self.tok.type == token.TokenTypes.greatere:
+          cond += ">="
+          self.advance()
+        elif self.tok.type == token.TokenTypes.lesse:
+          cond += "<="
           self.advance()
         else:
-          cond += "not "
-      elif self.tok.type == token.TokenTypes.greater:
-        cond += ">"
-        self.advance()
-      elif self.tok.type == token.TokenTypes.less:
-        cond += "<"
-        self.advance()
-      elif self.tok.type == token.TokenTypes.greatere:
-        cond += ">="
-        self.advance()
-      elif self.tok.type == token.TokenTypes.lesse:
-        cond += "<="
-        self.advance()
-      else:
-        temp = self.arg()
-        cond += f"'{temp}'" if type(temp) == str else str(temp)
+          temp = self.arg()
+          cond += f"'{temp}'" if type(temp) == str else str(temp)
+    else:
+      i = 0
+      while i < len(temp):
+        try:
+          if temp[i].type == token.TokenTypes.iequal:
+            cond += "=="
+            i += 1
+          elif temp[i].type == token.TokenTypes.nequal:
+            cond += "!="
+            i += 1
+          elif temp[i].type == "in":
+            cond += "in "
+            i += 1
+          elif temp[i].type == token.TokenTypes.exclamation:
+            i += 1
+            if self.tok is not None and self.tok.type ==    token.TokenTypes.builtin and self.tok.value == "in":
+              cond += "not in "
+              i += 1
+            else:
+              cond += "not "
+          elif temp[i].type == token.TokenTypes.greater:
+            cond += ">"
+            i += 1
+          elif temp[i].type == token.TokenTypes.less:
+            cond += "<"
+            i += 1
+          elif temp[i].type == token.TokenTypes.greatere:
+            cond += ">="
+            i += 1
+          elif temp[i].type == token.TokenTypes.lesse:
+            cond += "<="
+            i += 1
+        except:
+          cond += f"'{temp[i]}'" if type(temp[i]) == str else str(temp[i])
+          i += 1
     return eval(cond)
       
   def interpret(self):
@@ -362,6 +402,8 @@ to your program?""")
           local_vars.add(name, value)
         elif self.tok.value.lower() == "local":
           raise Exception("Local outside of function")
+        elif self.tok.value.lower() == "break":
+          raise IllegalBreak("Illegal break")
         elif self.tok.value.lower() == "using":
           self.advance()
           using[self.tok.value] = True
@@ -402,6 +444,30 @@ to your program?""")
             interpreter(toks).interpret()
           elif not a:
             interpreter(elsetoks).interpret()
+        elif self.tok.value == "while":
+          self.advance()
+          conditional = []
+          while self.tok.type != token.TokenTypes.semi:
+            try:
+              conditional.append(self.arg())
+            except:
+              conditional.append(self.tok)
+              self.advance()
+          a = self.condition(conditional)
+          self.advance()
+          toks = []
+          while self.tok is not None and self.tok.value != "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              toks.append(self.tok)
+              self.advance()
+          self.advance()
+          while a:
+            interpreter(toks).interpret()
+            a = self.condition(conditional)
         elif self.tok.value == "try":
           self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -613,9 +679,15 @@ to your program?""")
           for i in iterobj:
             global_vars.add(name, i)
             if self.func:
-              interpreter(toks, True).interpret()
+              try:
+                interpreter(toks, True).interpret()
+              except IllegalBreak:
+                break
             else:
-              interpreter(toks).interpret()
+              try:
+                interpreter(toks).interpret()
+              except IllegalBreak:
+                break
           global_vars.remove(name)
         elif self.tok.value == "pass":
           self.advance()
@@ -644,39 +716,29 @@ to your program?""")
           raise Exception("return outside of function")
         elif self.tok.value == "import":
           self.advance()
-          name = f"../stdlib/{self.tok.value}"
+          name = f"stdlib/{self.tok.value}.qball"
           raw_name = self.tok.value
           self.advance()
-          try:
-            if not os.path.exists(name) and raw_name not in os.listdir("../stdlib") and raw_name not in os.listdir(os.getcwd()) and f"{raw_name}.qball" not in os.listdir(os.getcwd()):
-              raise Exception("Unrecognized file")
-            elif os.path.exists(name):
-              importopen = open(name).read()
-              tokens = lexer(importopen)
-              interpreter(tokens).interpret()
-            elif raw_name in os.listdir("../stdlib"):
-              importopen = open(f"../stdlib/{raw_name}/main.qball").read()
-              tokens = lexer(importopen)
-              interpreter(tokens).interpret()
-            elif raw_name in os.listdir():
-              importopen = open(f"{raw_name}/main.qball").read()
-              tokens = lexer(importopen)
-              interpreter(tokens).interpret()
-            else:
-              importopen = open(f"{raw_name}.qball").read()
-              tokens = lexer(importopen)
-              interpreter(tokens).interpret()
-          except FileNotFoundError:
-            if f"{raw_name}.qball" not in os.listdir(os.getcwd()) and raw_name not in os.listdir():
-              raise Exception("Unrecognized file")
-            elif f"{raw_name}.qball" in os.listdir(f"{raw_name}.qball"):
-              importopen = open(name).read()
-              tokens = lexer(importopen)
-              interpreter(tokens).interpret()
-            elif raw_name in os.listdir(os.getcwd()):
-              importopen = open(f"{raw_name}/main.qball").read()
-              tokens = lexer(importopen)
-              interpreter(tokens).interpret()
+          if os.path.exists(name):
+            importopen = open(name).read()
+            tokens = lexer.lexer(importopen).generate_tokens()
+            interpreter(tokens).interpret()
+          elif f"{raw_name}.qball" in os.listdir("stdlib"):
+            importopen = open(f"stdlib/{raw_name}/main.qball").read()
+            tokens = lexer(importopen)
+            interpreter(tokens).interpret()
+          elif raw_name in os.listdir():
+            importopen = open(f"{raw_name}/main.qball").read()
+            tokens = lexer.lexer(importopen).generate_tokens()
+            interpreter(tokens).interpret()
+          elif raw_name in os.listdir("stdlib"):
+            importopen = open(f"stdlib/{raw_name}/main.qball").read()
+            tokens = lexer.lexer(importopen).generate_tokens()
+            interpreter(tokens).interpret()
+          else:
+            importopen = open(f"{raw_name}.qball").read()
+            tokens = lexer.lexer(importopen).generate_tokens()
+            interpreter(tokens).interpret()
           if self.tok is not None and self.tok.type != self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected ; or EOL")
           if self.tok is not None:
