@@ -1,22 +1,33 @@
+$ String standards
+
 global ascii_letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 global ascii_lower = "abcdefghijklmnopqrstuvwxyz";
 global ascii_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 global digits = "0123456789";
-global punctuation = "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+global punctuation = "!\\\"#$%&\\\'()*+,-./:;<=>?@[\]^_`{|}~";
 global hex = "0123456789abcdefABCDEF";
 global oct = "01234567";
 global outable = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ 	";
-global whitespace = " \t\n";
+global whitespace = " \t";
 
 _upper stringarg ret;
   local a = 0;
+  local retval = "";
   for i in stringarg;
-    if i in ascii_upper;
-      pass;
+    if i in ascii_upper | i in whitespace | i in punctuation;
+      retval[a] = i;
     else;
-      stringarg[a] = math i ^ 32;;
+      local c = 0;
+      for e in ascii_lower;
+        if i == e;
+          break;
+        end
+        c = math c + 1;;
+      end
+      retval[a] = ascii_upper[c];
+      out ascii_upper[c];
     end
     a = math a + 1;;
-   end
-  return stringarg ret;
+  end
+  return ret retval;
 end
