@@ -21,7 +21,6 @@ Everything you need to know is in [documentation.md](documentation.md)
 # Contribute
 Fork this to run the QBall shell: https://repl.it/@qballlang/QBall
 Changes are commited 8:00 PM EST every day I can
-=========
 
 # Contribute
 Fork this to run the [QBall shell](https://repl.it/@qballlang/QBall)
@@ -42,7 +41,6 @@ to install the package! To use the package use
 import QBall
 ```
 It includes the functions evaluate and global_add. Consider this example:
-=======
 ```py
 import QBall
 # The following code runs evaluate's argument as QBall code
