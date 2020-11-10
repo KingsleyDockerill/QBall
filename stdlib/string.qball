@@ -28,7 +28,6 @@ _upper stringarg ret;
         c = math c + 1;;
       end
       retval[a] = ascii_upper[c];
-      out ascii_upper[c];
     end
     a = math a + 1;;
   end
@@ -53,7 +52,6 @@ _lower stringarg ret;
         c = math c + 1;;
       end
       retval[a] = ascii_lower[c];
-      out ascii_lower[c];
     end
     a = math a + 1;;
   end
