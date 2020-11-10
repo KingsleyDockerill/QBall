@@ -1,7 +1,7 @@
-for i in "Hello, world!";
-  if i == "!";
-    break;
-  else;
-    out i;
+_test;
+  local a = 0;
+  until a > 1000;
+    out "Here!";
+    a = math a + 1;;
   end
 end

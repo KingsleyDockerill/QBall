@@ -596,6 +596,7 @@ to your program?""")
           a = self.condition(conditional)
           toks = []
           while self.tok is not None and self.tok.value != "end":
+            print(self.tok)
             if self.tok.value in ends:
               e = self.ends_in_func()
               for i in e:
@@ -607,42 +608,6 @@ to your program?""")
           while not a:
             interpreter(toks).interpret()
             a = self.condition(conditional)
-        elif self.tok.value == "try":
-          self.advance()
-          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            raise Exception("No ; after try")
-          if self.tok is not None:
-            self.advance()
-          trytoks = []
-          while self.tok is not None and self.tok.value != "except":
-            trytoks.append(self.tok)
-            self.advance()
-          self.advance()
-          name = ""
-          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-            name = self.tok.value
-            self.advance()
-            if self.tok is not None and self.tok.type != token.TokenTypes.semi:
-              raise Exception("No ; after except")
-          if self.tok is not None:
-            self.advance()
-          tokexcept = []
-          while self.tok is not None and self.tok.value != "end":
-            if self.tok.value in ends:
-              e = self.ends_in_func()
-              for i in e:
-                toks.append(i)
-            else:
-              tokexcept.append(self.tok)
-              self.advance()
-          self.advance()
-          try:
-            interpreter(trytoks).interpret()
-          except Exception as e:
-            if name:
-              local_vars.add(name, e)
-            interpreter(tokexcept).interpret()
-            local_vars.remove(name)
         elif self.tok.value == "try":
           self.advance()
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -961,6 +926,7 @@ to your program?""")
           else:
             toks.append(self.tok)
             self.advance()
+        self.advance()
         self.advance()
         function.add(func_name, toks)
       elif self.tok.type in (token.TokenTypes.squote, token.TokenTypes.dquote):
