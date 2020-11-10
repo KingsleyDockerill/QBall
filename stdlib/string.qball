@@ -11,6 +11,9 @@ global outable = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 global whitespace = " \t";
 
 _upper stringarg ret;
+  if !stringarg;
+    raise("Upper requires 1+ characters")
+  end
   local a = 0;
   local retval = "";
   for i in stringarg;
@@ -33,6 +36,9 @@ _upper stringarg ret;
 end
 
 _lower stringarg ret;
+  if !stringarg;
+    raise("Lower requires 1+ characters")
+  end
   local a = 0;
   local retval = "";
   for i in stringarg;
@@ -52,4 +58,82 @@ _lower stringarg ret;
     a = math a + 1;;
   end
   return ret retval;
+end
+
+_find stringarg ret;
+  if !stringarg;
+    raise("Find requires 1+ characters")
+  end
+  pass;
+end
+
+_isnumeric a ret;
+  if !a;
+    raise("Isnumeric requires 1+ characters")
+  end
+  $ If a is a number, return True to ret
+  local floatcount = 0;
+  local isnum = 1;
+  for i in a;
+    if i in digits | i in "-#.";
+      if i == ".";
+        floatcount = math floatcount + 1;;
+      end
+    else;
+      isnum = 0;
+      break;
+    end
+    if floatcount < 1;
+      isnum = 0;
+      break;
+    end
+  end
+  return ret isnum;
+end
+
+_islower a ret;
+  if !a;
+    raise("Islower requires 1+ characters")
+  end
+  $ If a is all lower, return True to ret
+  local islow = 1;
+  for i in a;
+    if i in ascii_lower | i in punctuation | i in digits | i in whitespace;
+      pass;
+    else;
+      out i;
+      islow = 0;
+      break;
+    end
+  end
+  return ret islow;
+end
+
+_isupper a ret;
+  if !a;
+    raise("Isupper requires 1+ characters")
+  end
+  $ If a is all lower, return True to ret
+  local isup = 1;
+  for i in a;
+    if i in ascii_upper | i in punctuation | i in digits | i in whitespace;
+      pass;
+    else;
+      out i;
+      isup = 0;
+      break;
+    end
+  end
+  return ret isup;
+end
+
+_length stringarg ret;
+  if !stringarg;
+    raise("Length requires 1+ characters")
+  end
+  local length = 0;
+  for i in stringarg;
+    length = math length + 1;;
+  end
+  return ret length;
 end
