@@ -31,3 +31,25 @@ _upper stringarg ret;
   end
   return ret retval;
 end
+
+_lower stringarg ret;
+  local a = 0;
+  local retval = "";
+  for i in stringarg;
+    if i in ascii_lower | i in whitespace | i in punctuation;
+      retval[a] = i;
+    else;
+      local c = 0;
+      for e in ascii_upper;
+        if i == e;
+          break;
+        end
+        c = math c + 1;;
+      end
+      retval[a] = ascii_lower[c];
+      out ascii_lower[c];
+    end
+    a = math a + 1;;
+  end
+  return ret retval;
+end
