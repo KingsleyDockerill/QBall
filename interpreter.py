@@ -96,7 +96,6 @@ class interpreter:
   def advance(self):
     try:
       self.tok = next(self.toks)
-      print(self.tok)
     except StopIteration:
       self.section = EOF
       self.tok = None
@@ -201,6 +200,10 @@ class interpreter:
           mathstr += str(global_vars[self.tok.value])
         elif self.tok.value in local_vars and type(local_vars[self.tok.value]) == int:
           mathstr += str(local_vars[self.tok.value])
+        elif self.tok.value in global_vars and type(global_vars[self.tok.value]) == str:
+          mathstr += f"'{global_vars[self.tok.value]}'"
+        elif self.tok.value in local_vars and type(local_vars[self.tok.value]) == str:
+          mathstr += f"'{local_vars[self.tok.value]}'"
         else:
           raise Exception("Illegal math operator!")
         self.advance()
@@ -304,6 +307,12 @@ to your program?""")
         elif self.tok.type == token.TokenTypes.lesse:
           cond += "<="
           self.advance()
+        elif self.tok.type == token.TokenTypes.or_:
+          cond += " or "
+          self.advance()
+        elif self.tok.type == token.TokenTypes.and_:
+          cond += " and "
+          self.advanc()
         else:
           temp = self.arg()
           cond += f"'{temp}'" if type(temp) == str else str(temp)
@@ -463,7 +472,37 @@ to your program?""")
             try:
               global_vars[name][index] = a
             except:
-              global_vars[name].insert(index, a)
+              try:
+                global_vars[name].insert(index, a)
+              except:
+                global_vars[name] += str(a)
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value in local_vars:
+          name = self.tok.value
+          self.advance()
+          if self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            local_vars[name] = self.arg()
+          elif self.tok.type == token.TokenTypes.lbrack:
+            self.advance()
+            index = self.arg()
+            if self.tok.type != token.TokenTypes.rbrack:
+              raise Exception("Expected [index]")
+            self.advance()
+            if self.tok.type != token.TokenTypes.equal:
+              raise Exception("Expected [index] = arg")
+            self.advance()
+            a = self.arg()
+            try:
+              local_vars[name][index] = a
+            except:
+              try:
+                local_vars[name].insert(index, a)
+              except:
+                local_vars[name] += str(a)
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected EOL")
           if self.tok is not None:
@@ -497,9 +536,9 @@ to your program?""")
                 self.advance()
           self.advance()
           if a:
-            interpreter(toks).interpret()
+            interpreter(toks, True if self.func else False).interpret()
           elif not a:
-            interpreter(elsetoks).interpret()
+            interpreter(elsetoks, True if self.func else False).interpret()
         elif self.tok.value == "while":
           self.advance()
           conditional = []
