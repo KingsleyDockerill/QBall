@@ -1,0 +1,6 @@
+import string;
+
+global a = "Hello world";
+global b;
+upper a b;
+out b

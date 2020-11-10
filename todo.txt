@@ -1,0 +1,13 @@
+Sting Manipulation
+•Accessing
+•Finding
+•Count (print s.count(' '))
+•Slicing
+•Split strings
+•Starts with
+•End with
+•Repeat strings
+•Replace
+•Reverse
+•Strip
+•More at https://www.pythonforbeginners.com/basics/string-manipulation-in-python

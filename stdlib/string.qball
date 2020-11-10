@@ -12,7 +12,7 @@ global whitespace = " \t";
 
 _upper stringarg ret;
   if !stringarg;
-    raise("Upper requires 1+ characters")
+    raise "Upper requires 1+ characters"
   end
   local a = 0;
   local retval = "";
@@ -37,7 +37,7 @@ end
 
 _lower stringarg ret;
   if !stringarg;
-    raise("Lower requires 1+ characters")
+    raise "Lower requires 1+ characters"
   end
   local a = 0;
   local retval = "";
@@ -62,14 +62,14 @@ end
 
 _find stringarg ret;
   if !stringarg;
-    raise("Find requires 1+ characters")
+    raise "Find requires 1+ characters"
   end
   pass;
 end
 
 _isnumeric a ret;
   if !a;
-    raise("Isnumeric requires 1+ characters")
+    raise "Isnumeric requires 1+ characters"
   end
   $ If a is a number, return True to ret
   local floatcount = 0;
@@ -93,7 +93,7 @@ end
 
 _islower a ret;
   if !a;
-    raise("Islower requires 1+ characters")
+    raise "Islower requires 1+ characters"
   end
   $ If a is all lower, return True to ret
   local islow = 1;
@@ -111,7 +111,7 @@ end
 
 _isupper a ret;
   if !a;
-    raise("Isupper requires 1+ characters")
+    raise "Isupper requires 1+ characters"
   end
   $ If a is all lower, return True to ret
   local isup = 1;
@@ -129,11 +129,11 @@ end
 
 _length stringarg ret;
   if !stringarg;
-    raise("Length requires 1+ characters")
+    raise "Length requires 1+ characters"
   end
-  local length = 0;
+  local len = 0;
   for i in stringarg;
-    length = math length + 1;;
+    length = math len + 1;;
   end
-  return ret length;
+  return ret len;
 end

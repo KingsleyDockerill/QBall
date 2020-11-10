@@ -926,8 +926,8 @@ to your program?""")
           else:
             toks.append(self.tok)
             self.advance()
-        self.advance()
-        self.advance()
+        self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
+        self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
         function.add(func_name, toks)
       elif self.tok.type in (token.TokenTypes.squote, token.TokenTypes.dquote):
         self.advance()
