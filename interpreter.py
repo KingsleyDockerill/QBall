@@ -1,4 +1,5 @@
 from tokens import token
+import lexer
 import check
 from copy import deepcopy
 import os
@@ -112,7 +113,7 @@ class interpreter:
     elif self.tok.value in global_vars:
       name = self.tok.value
       self.advance()
-      if self.tok.type == token.TokenTypes.lbrack:
+      if self.tok is not None and self.tok.type == token.TokenTypes.lbrack:
         self.advance()
         index = self.arg()
         if self.tok.type != token.TokenTypes.rbrack:
@@ -857,7 +858,7 @@ to your program?""")
             interpreter(tokens).interpret()
           elif f"{raw_name}.qball" in os.listdir("stdlib"):
             importopen = open(f"stdlib/{raw_name}/main.qball").read()
-            tokens = lexer(importopen)
+            tokens = lexer.lexer(importopen)
             interpreter(tokens).interpret()
           elif raw_name in os.listdir():
             importopen = open(f"{raw_name}/main.qball").read()

@@ -1,0 +1,9 @@
+global ascii_letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+global ascii_lower = "abcdefghijklmnopqrstuvwxyz";
+global ascii_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+global digits = "0123456789";
+global punctuation = "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+global hex = "0123456789abcdefABCDEF";
+global oct = "01234567";
+global outable = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ 	";
+global whitespace = " \t\n";
