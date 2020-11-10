@@ -28,7 +28,6 @@ Changes are commited 8:00 PM EST every day I can.
 
 # Trello board
 The official Trello board: https://trello.com/b/cJM6HsR3/qball
-=======
 [The official Trello board](https://trello.com/b/cJM6HsR3/qball)
 
 # We're on pip!
