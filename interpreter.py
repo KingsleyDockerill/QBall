@@ -96,6 +96,7 @@ class interpreter:
   def advance(self):
     try:
       self.tok = next(self.toks)
+      print(self.tok)
     except StopIteration:
       self.section = EOF
       self.tok = None
@@ -166,7 +167,7 @@ class interpreter:
       value = 1
     elif self.tok.value == "False":
       value = 0
-    elif self.tok.value is not None and self.tok.value.lower() == "math":
+    elif self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()
       while self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -194,6 +195,8 @@ class interpreter:
           mathstr += ")"
         elif self.tok.type in (token.TokenTypes.integer, token.TokenTypes.floating):
           mathstr += str(self.tok.value)
+        elif self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote):
+          mathstr += self.arg()
         elif self.tok.value in global_vars and type(global_vars[self.tok.value]) == int:
           mathstr += str(global_vars[self.tok.value])
         elif self.tok.value in local_vars and type(local_vars[self.tok.value]) == int:
@@ -201,7 +204,7 @@ class interpreter:
         else:
           raise Exception("Illegal math operator!")
         self.advance()
-      self.advance() if not self.func else print(end="")
+      self.advance()
       value = eval(mathstr)
     elif using["os"] and self.tok.value == "os":
       self.advance()

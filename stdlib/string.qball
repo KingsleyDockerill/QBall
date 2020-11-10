@@ -7,3 +7,16 @@ global hex = "0123456789abcdefABCDEF";
 global oct = "01234567";
 global outable = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ 	";
 global whitespace = " \t\n";
+
+_upper stringarg ret;
+  local a = 0;
+  for i in stringarg;
+    if i in ascii_upper;
+      pass;
+    else;
+      stringarg[a] = math i ^ 32;;
+    end
+    a = math a + 1;;
+   end
+  return stringarg ret;
+end
