@@ -150,7 +150,7 @@ class lexer:
   def generate_function(self):
     function = ""
     # This is used for any unrecognized tokens
-    while self.char is not None and self.char not in WHITESPACE + "=;[]": # Without this you would need to do out "Hello!" ;
+    while self.char is not None and self.char not in WHITESPACE + "=;[]+-*/": # Without this you would need to do out "Hello!" ;
       function += self.char
       self.advance()
     return function
