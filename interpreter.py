@@ -78,13 +78,14 @@ local_vars = dictionary()
 function = dictionary()
 arg = dictionary()
 argvars = dictionary()
+limited_funcs = dictionary()
 using = {"os": False, "regex": False, "server": False, "client": False}
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "try"]
 EOF = -1
 
 class interpreter:
-  def __init__(self, toks, func=False, class_=False, classname=""):
+  def __init__(self, toks, func=False, class_=False, classname="", functionname=""):
     self.toks = iter(toks)
     self.func = func
     self.class_ = class_
@@ -810,6 +811,19 @@ to your program?""")
             pass
           for i in arg[funcname]:
             local_vars.remove(i)
+          try:
+            times = int(funcname.split("_")[0][1:])
+            if funcname.split("_")[0][0] != "U":
+              raise Exception("")
+            if funcname not in limited_funcs:
+              limited_funcs.add(funcname, times - 1)
+            else:
+              limited_funcs[funcname] -= 1
+            if not limited_funcs[funcname]:
+              function.remove(funcname)
+              argvars.remove(funcname)
+          except Exception as e:
+            pass
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected ; or EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:

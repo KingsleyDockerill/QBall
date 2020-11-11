@@ -1,7 +1,5 @@
-_test;
-  local a = 0;
-  until a > 1000;
-    out "Here!";
-    a = math a + 1;;
-  end
+_U1_test;
+  out "This is a test!";
 end
+U1_test;
+U1_test

@@ -1,5 +1,4 @@
 Sting Manipulation
-•Accessing
 •Finding
 •Count (print s.count(' '))
 •Slicing

@@ -1,6 +1,7 @@
 import string;
 
-global a = "Hello world";
-global b;
-upper a b;
-out b;
+global a = "Hello!";
+global b = 4;
+global c;
+access a b c;
+out c

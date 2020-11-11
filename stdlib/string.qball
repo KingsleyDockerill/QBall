@@ -131,7 +131,7 @@ _length stringarg ret;
   end
   local len = 0;
   for i in stringarg;
-    length = math len + 1;;
+    len += 1;
   end
   return ret len;
 end
@@ -141,4 +141,18 @@ _access stringarg num ret;
     raise "Access requires 1+ characters"
   end
   return ret stringarg[num];
+end
+
+_join stringarg joiner ret;
+  if !stringarg;
+    raise "Join requires 1+ characters"
+  end
+  local a = "";
+  local c = 0;
+  for i in stringarg;
+    a += i;
+    a += joiner;
+    c += 1;
+  end
+  return ret a;
 end
