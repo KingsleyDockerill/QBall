@@ -111,7 +111,7 @@ _isupper a ret;
   if !a;
     raise "Isupper requires 1+ characters"
   end
-  $ If a is all lower, return True to ret
+  $ If a is all upper, return True to ret
   local isup = 1;
   for i in a;
     if i in ascii_upper | i in punctuation | i in digits | i in whitespace;
@@ -134,4 +134,11 @@ _length stringarg ret;
     length = math len + 1;;
   end
   return ret len;
+end
+
+_access stringarg num ret;
+  if !stringarg;
+    raise "Access requires 1+ characters"
+  end
+  return ret stringarg[num];
 end

@@ -160,8 +160,54 @@ class interpreter:
             string += str(i)
         value = string + "\b]"
     elif self.tok.value in local_vars:
-      value = local_vars[self.tok.value]
+      name = self.tok.value
       self.advance()
+      if self.tok is not None and self.tok.type == token.TokenTypes.lbrack:
+        self.advance()
+        index = self.arg()
+        if self.tok.type != token.TokenTypes.rbrack:
+          raise Exception("Expected [index]")
+        self.advance()
+        value = local_vars[name][index]
+      else:
+        value = local_vars[name]
+      if using["os"] and type(value) == os_obj:
+        # cmp using f string to prevent TypeError
+        if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
+          value = os_obj()
+        elif self.tok.value == "name":
+          value = os_obj().name
+          self.advance()
+        elif self.tok.value == "exists":
+          self.advance()
+          value = os_obj().exists(path=self.arg())
+      elif using["regex"] and type(value) == regex_obj:
+        self.advance()
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          raise Exception("regex requires 2 arguments")
+        regex = regex_obj(self.arg(), self.arg())
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          value = regex_obj()
+        elif self.tok.value == "findall":
+          value = re.findall(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "search":
+          value = re.search(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "sub":
+          self.advance()
+          value = re.sub(regex.regex, self.arg(), regex.string)
+          self.advance()
+        else:
+          raise Exception(f"regex object has no atrribute   {self.tok.value}")
+      elif type(value) == list:
+        string = "["
+        for i in value:
+          if type(i) == str:
+            string += f"'{i}' "
+          else:
+            string += str(i)
+        value = string + "\b]"
     elif self.tok.value == "True":
       value = 1
     elif self.tok.value == "False":

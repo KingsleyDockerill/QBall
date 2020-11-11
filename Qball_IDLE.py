@@ -5,10 +5,12 @@ import interpreter
 
 # THIS IS TEMPORARY
 root = tk.Tk()
-root.title("QBE") # QBall Editor
+root.title("QBE")  # QBall Editor
 root.minsize(1530, 1000)
 text = tk.Text(root, padx=int(5), pady=int(5))
-text.insert(tk.INSERT, "out 'Hello, world!'\n$ Delete this and start writing your own code!")
+text.insert(
+    tk.INSERT,
+    "out 'Hello, world!'\n$ Delete this and start writing your own code!")
 var1 = tk.StringVar()
 var1.set("File path or name:")
 label1 = tk.Label(root, textvariable=var1, height=2)
@@ -21,18 +23,24 @@ box1 = tk.Entry(root, textvariable=ID1)
 box1.pack()
 box2 = tk.Entry(root, textvariable=ID2)
 box2.pack()
+
+
 def create_file():
     with open(box1.get() + ".qball", "w") as f:
         f.write(text.get(1.0, "end"))
+
+
 def read_file():
     with open(box2.get() + ".qball", "r") as f:
         print(box2.get())
         text.delete(1.0, "end")
         f.seek(0)
         text.insert(1.0, f.read())
+
+
 def run():
-  a = text.get(1.0, "end")
-  interpreter.interpreter(lexer.lexer(a).generate_tokens()).interpret()
+    a = text.get(1.0, "end")
+    interpreter.interpreter(lexer.lexer(a).generate_tokens()).interpret()
 
 
 buttonA = tk.Button(root, text="Save info", command=create_file)
