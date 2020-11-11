@@ -552,6 +552,55 @@ to your program?""")
                 local_vars[name].insert(index, a)
               except:
                 local_vars[name] += str(a)
+          elif self.tok.type == token.TokenTypes.plus:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] += self.arg()
+            else:
+              raise Exception("After + expected =")
+          elif self.tok.type == token.TokenTypes.minus:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] -= self.arg()
+            else:
+              raise Exception("After - expected =")
+          elif self.tok.type == token.TokenTypes.multiply:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] *= self.arg()
+            else:
+              raise Exception("After * expected =")
+          elif self.tok.type == token.TokenTypes.divide:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] /= self.arg()
+            else:
+              raise Exception("After / expected =")
+          elif self.tok.type == token.TokenTypes.and_:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] &= self.arg()
+            else:
+              raise Exception("After & expected =")
+          elif self.tok.type == token.TokenTypes.or_:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] |= self.arg()
+            else:
+              raise Exception("After | expected =")
+          elif self.tok.type == token.TokenTypes.xor:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              local_vars[name] ^= self.arg()
+            else:
+              raise Exception("After ^ expected =")
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected EOL")
           if self.tok is not None:
