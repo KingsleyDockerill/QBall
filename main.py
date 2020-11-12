@@ -20,3 +20,6 @@ while True:
       print(f"\033[91mError at section {interpret.section}: {e}\033[00m")
     except NameError:
       print(f"\033[91mLexer error: {e}\033[00m")
+  try: command.close();
+  except AttributeError: pass
+  except Exception as e: print(e)

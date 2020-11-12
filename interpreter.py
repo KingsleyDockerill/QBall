@@ -79,7 +79,7 @@ function = dictionary()
 arg = dictionary()
 argvars = dictionary()
 limited_funcs = dictionary()
-degig = False
+debug = False
 using = {"os": False, "regex": False, "server": False, "client": False}
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "try"]
