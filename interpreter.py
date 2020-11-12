@@ -822,7 +822,7 @@ to your program?""")
             if not limited_funcs[funcname]:
               function.remove(funcname)
               argvars.remove(funcname)
-          except Exception as e:
+          except:
             pass
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected ; or EOL")
@@ -1085,6 +1085,28 @@ to your program?""")
             toks.append(self.tok)
             self.advance()
         self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
+        self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
+        function.add(func_name, toks)
+      elif self.tok.type == token.TokenTypes.multiply:
+        self.advance()
+        func_name = self.tok.value
+        self.advance()
+        args = []
+        toks = []
+        while self.tok.type != token.TokenTypes.semi:
+          args.append(self.tok.value)
+          self.advance()
+        arg.add(func_name, args)
+        self.advance()
+        while self.tok is not None and self.tok.value != "end":
+          if self.tok.value in ends:
+            e = self.ends_in_func()
+            for i in e:
+              toks.append(i)
+          else:
+            toks.append(self.tok)
+            self.advance()
+        self.advance()
         self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
         function.add(func_name, toks)
       elif self.tok.type in (token.TokenTypes.squote, token.TokenTypes.dquote):

@@ -1,7 +1,7 @@
 _U1_test;
   out "This is a test!";
 end
-$ Output "This is a test!"
 U1_test;
-$ Raise error
-U1_test
+_test a;
+  out a;
+end
