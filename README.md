@@ -46,3 +46,18 @@ QBall.evaluate("out 'Hello, world!'")
 QBall.global_add(a=5)
 QBall.evaluate("out a")
 ```
+## To-Do
+The To-Do list for Qball!
+
+- [ ] Sting Manipulation
+- [ ] Finding
+- [ ] Count (print s.count(' '))
+- [ ] Slicing
+- [ ] Split strings
+- [ ] Starts with
+- [ ] End with
+- [ ] Repeat strings
+- [ ] Replace
+- [ ] Reverse
+- [ ] Strip
+> More at https://www.pythonforbeginners.com/basics/string-manipulation-in-python
