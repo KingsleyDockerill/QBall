@@ -3,6 +3,10 @@ import tkinter as tk
 import lexer
 import interpreter
 
+# MUSTS:
+# Syntax highlighting
+# File tab
+
 # THIS IS TEMPORARY
 root = tk.Tk()
 root.title("QBE")  # QBall Editor
