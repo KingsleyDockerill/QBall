@@ -5,3 +5,4 @@ U1_test;
 _test a;
   out a;
 end
+test "Hello, world!"

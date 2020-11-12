@@ -79,6 +79,7 @@ function = dictionary()
 arg = dictionary()
 argvars = dictionary()
 limited_funcs = dictionary()
+degig = False
 using = {"os": False, "regex": False, "server": False, "client": False}
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "try"]
@@ -86,6 +87,7 @@ EOF = -1
 
 class interpreter:
   def __init__(self, toks, func=False, class_=False, classname="", functionname=""):
+    global debug
     self.toks = iter(toks)
     self.func = func
     self.class_ = class_
@@ -96,7 +98,9 @@ class interpreter:
 
   def advance(self):
     try:
+      print("Before: ", self.tok) if debug else print(end="")
       self.tok = next(self.toks)
+      print("After: ", self.tok) if debug else print(end="")
     except StopIteration:
       self.section = EOF
       self.tok = None
@@ -213,7 +217,7 @@ class interpreter:
       value = 1
     elif self.tok.value == "False":
       value = 0
-    elif self.tok.value.lower() == "math":
+    elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()
       while self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -648,6 +652,66 @@ to your program?""")
               local_vars[name] ^= self.arg()
             else:
               raise Exception("After ^ expected =")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value == "integer":
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok.type != token.TokenTypes.equal:
+            raise Exception("Expected = in integer decleration")
+          self.advance()
+          tempvalue = self.arg()
+          if type(tempvalue) != int:
+            raise Exception("Non-integer value assigned to int!")
+          global_vars.add(name, tempvalue)
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value == "string":
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok.type != token.TokenTypes.equal:
+            raise Exception("Expected = in string decleration")
+          self.advance()
+          tempvalue = self.arg()
+          if type(tempvalue) != str:
+            raise Exception("Non-string value assigned to str!")
+          global_vars.add(name, tempvalue)
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value == "float":
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok.type != token.TokenTypes.equal:
+            raise Exception("Expected = in float decleration")
+          self.advance()
+          tempvalue = self.arg()
+          if type(tempvalue) != float:
+            raise Exception("Non-float value assigned to float!")
+          global_vars.add(name, tempvalue)
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value == "list":
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok.type != token.TokenTypes.equal:
+            raise Exception("Expected = in integer decleration")
+          self.advance()
+          tempvalue = self.arg()
+          if type(tempvalue) != list:
+            raise Exception("Non-list value assigned to list!")
+          global_vars.add(name, tempvalue)
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected EOL")
           if self.tok is not None:
