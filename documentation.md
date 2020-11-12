@@ -126,7 +126,7 @@ in a;
 out a
 ```
 This would take in input, store it in a new variable a, and then output it. Keep in mind you can run all of these programs in one line 
-> (for the shell you would use this; in a; out a unless you do each on seperate lines of input)
+> For the shell you would use this; in a; out a unless you do each on seperate lines of input
 
 ## Functions
 
