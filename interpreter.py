@@ -215,8 +215,13 @@ class interpreter:
         value = string + "\b]"
     elif self.tok.value == "True":
       value = 1
+      self.advance()
     elif self.tok.value == "False":
       value = 0
+      self.advance()
+    elif self.tok.value == "None":
+      value = None
+      self.advance()
     elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()
@@ -525,8 +530,11 @@ to your program?""")
             except:
               try:
                 global_vars[name].insert(index, a)
-              except:
-                global_vars[name] += str(a)
+              except AttributeError:
+                try:
+                  global_vars[name] = "".join(list(global_vars[name]).insert(index, a))
+                except IndexError:
+                  global_vars[name] += str(a)
           elif self.tok.type == token.TokenTypes.plus:
             self.advance()
             if self.tok.type == token.TokenTypes.equal:

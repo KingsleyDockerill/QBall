@@ -159,32 +159,32 @@ class lexer:
     string = ""
     # Cancatonate the char until the char is None or symbol. Symbol = ' or " depending on which you used
     while self.char is not None and self.char not in symbol:
-        if self.char == "\\":
+      if self.char == "\\":
+        self.advance()
+        if self.char == "t":
+          string += "\t"
           self.advance()
-          if self.char == "t":
-            string += "\t"
+        elif self.char == "b":
+          string += "\b"
+          self.advance()
+        elif self.char == "n":
+          string += "\n"
+          self.advance()
+        elif self.char in digits:
+          numspace = ""
+          while self.char in digits:
+            numspace += self.char
             self.advance()
-          elif self.char == "b":
-            string += "\b"
-            self.advance()
-          elif self.char == "n":
-            string += "\n"
-            self.advance()
-          elif self.char in digits:
-            numspace = ""
-            while self.char in digits:
-              numspace += self.char
-              self.advance()
-            numspace = int(numspace)
-            while numspace != 0:
-              string += " "
-              numspace -= 1
-          else:
-            string += self.char
-            self.advance()
+          numspace = int(numspace)
+          while numspace != 0:
+            string += " "
+            numspace -= 1
         else:
-            string += self.char
-            self.advance()
+          string += self.char
+          self.advance()
+      else:
+          string += self.char
+          self.advance()
     if self.char is None:
       raise Exception("No end of string found")
     return string
