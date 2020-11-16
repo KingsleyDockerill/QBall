@@ -9,6 +9,7 @@ import socket
 import threading
 import requests
 import string
+import sys
 
 class dictionary(dict):
   def __init__(self):
@@ -222,6 +223,18 @@ class interpreter:
     elif self.tok.value == "None":
       value = None
       self.advance()
+    elif self.tok.value == "argv":
+      value = sys.argv
+      self.advance()
+    elif self.tok.value == "argc":
+      value = len(sys.argv)
+      self.advance()
+    elif self.tok.value == "in":
+      self.advance()
+      value = input(self.arg())
+    elif self.tok.value == "py_eval":
+      self.advance()
+      value = eval(self.arg())
     elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()
@@ -314,6 +327,8 @@ to your program?""")
       raise Exception("Illegal argument")
     if type(value) != str and str(value) == "True":
       value = 1
+    elif type(value) != str and str(value) == "False":
+      value = 0
     return value
 
   # Since both functions and if/for/etc use end, this handles that
@@ -813,7 +828,6 @@ to your program?""")
           a = self.condition(conditional)
           toks = []
           while self.tok is not None and self.tok.value != "end":
-            print(self.tok)
             if self.tok.value in ends:
               e = self.ends_in_func()
               for i in e:

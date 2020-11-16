@@ -1,8 +1,0 @@
-_U1_test;
-  out "This is a test!";
-end
-U1_test;
-_test a;
-  out a;
-end
-test "Hello, world!"

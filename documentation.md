@@ -126,6 +126,11 @@ in a;
 out a
 ```
 This would take in input, store it in a new variable a, and then output it. Keep in mind you can run all of these programs in one line 
+But there is another way that costs a bit more efficiency with less code. Along with the builtin there is a keyword `in`. To use this use this
+```
+out "You entered" in "Enter something: "
+```
+It also allows for you to have a custom prompt. if you run the above code then it will prompt you `Enter something: ` before printing out "You entered `your input`"
 > (for the shell you would use this; in a; out a unless you do each on seperate lines of input)
 
 ## Functions
