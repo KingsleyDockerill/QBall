@@ -25,7 +25,6 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.vs/
 MANIFEST
 
 # PyInstaller
@@ -68,6 +67,9 @@ instance/
 
 # Scrapy stuff:
 .scrapy
+
+# VS stuff:
+.vs/**
 
 # Sphinx documentation
 docs/_build/
