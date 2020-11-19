@@ -156,3 +156,15 @@ _join stringarg joiner ret;
   end
   return ret a;
 end
+
+_strip stringarg ret;
+  local string;
+  for i in stringarg;
+    if i in " \t";
+      pass;
+    else;
+      string += i;
+    end
+  end
+  return ret string;
+end
