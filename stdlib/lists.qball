@@ -1,10 +1,9 @@
-_len a;
-  $ Creates a new global variable length equal to c
+_len a b;
   local c = 0;
   for i in a;
     c += 1;
   end
-  return a c;
+  return b c;
 end
 _append a b;
   $ Append b to a

@@ -54,5 +54,4 @@ The To-Do list for Qball!
 - [ ] Repeat strings
 - [ ] Replace
 - [ ] Reverse
-- [ ] Strip
 > More at https://www.pythonforbeginners.com/basics/string-manipulation-in-python

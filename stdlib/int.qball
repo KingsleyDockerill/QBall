@@ -1,0 +1,6 @@
+_roundup arg ret;
+  if !arg;
+    raise "roundup requires 1+ numbers"
+  end
+  return ret arg;
+end

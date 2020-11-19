@@ -167,4 +167,8 @@ _strip stringarg ret;
     end
   end
   return ret string;
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> origin/master

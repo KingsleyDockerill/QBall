@@ -3,5 +3,4 @@ in a;
 out "Enter some Python code: " newline=0;
 in b;
 qstr a;
-out b;
 py b

@@ -1,5 +1,8 @@
 import lexer
 import interpreter
+import time
+
+# Added efficiency with print statements
 
 while True:
   command = input(">>> ")
@@ -17,9 +20,9 @@ while True:
       interpret.interpret()
   except Exception as e:
     try:
-      print(f"\033[91mError at section {interpret.section}: {e}\033[00m")
+      print(f"\033[91mError at section {interpret.section}: {e}\033[00m", flush=True)
     except NameError:
-      print(f"\033[91mLexer error: {e}\033[00m")
+      print(f"\033[91mLexer error: {e}\033[00m", flush=True)
   try: command.close();
   except AttributeError: pass
   except Exception as e: print(e)
