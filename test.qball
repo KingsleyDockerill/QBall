@@ -1,0 +1,4 @@
+*mynewobj;
+  out "test";
+end
+global a = mynewobj

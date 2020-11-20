@@ -25,9 +25,10 @@ class dictionary(dict):
       pass
 
 class object:
-  def __init__(self, args: list, funcs: list):
+  def __init__(self, name, args):
+    self.name_ = name
     self.args = args
-    self.funcs = funcs
+    self.funcs = dictionary()
     self.local = dictionary()
     self.global_ = dictionary()
 
@@ -81,7 +82,8 @@ arg = dictionary()
 argvars = dictionary()
 limited_funcs = dictionary()
 debug = False
-using = {"os": False, "regex": False, "server": False, "client": False}
+using = {"os": False, "regex": False, "server": False,"client": False}
+constructors = dictionary()
 # All reserved keywords that use "end"
 ends = ["for", "while", "if", "try"]
 EOF = -1
@@ -249,6 +251,14 @@ class interpreter:
         value = 0
       except:
         value = 1
+      self.advance()
+    elif self.tok.value is not None and self.tok.value in constructors:
+      class_name = self.tok.value
+      args = dictionary()
+      for i in arg[class_name]:
+        args.add(i, self.arg())
+      value = object(class_name, args)
+      interpreter(constructors[class_name], class_=True, classname=class_name).interpret()
       self.advance()
     elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
@@ -1179,14 +1189,13 @@ to your program?""")
         function.add(func_name, toks)
       elif self.tok.type == token.TokenTypes.multiply:
         self.advance()
-        func_name = self.tok.value
+        class_name = self.tok.value
         self.advance()
         args = []
         toks = []
         while self.tok.type != token.TokenTypes.semi:
           args.append(self.tok.value)
           self.advance()
-        arg.add(func_name, args)
         self.advance()
         while self.tok is not None and self.tok.value != "end":
           if self.tok.value in ends:
@@ -1198,7 +1207,8 @@ to your program?""")
             self.advance()
         self.advance()
         self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
-        function.add(func_name, toks)
+        constructors.add(class_name, toks)
+        arg.add(class_name, args)
       elif self.tok.type in (token.TokenTypes.squote, token.TokenTypes.dquote):
         self.advance()
         self.advance()
