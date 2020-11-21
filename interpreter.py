@@ -89,13 +89,14 @@ ends = ["for", "while", "if", "try"]
 EOF = -1
 
 class interpreter:
-  def __init__(self, toks, func=False, class_=False, classname="", functionname=""):
+  def __init__(self, toks, func=False, class_=False, classname=""):
     global debug
     self.toks = iter(toks)
     self.func = func
     self.class_ = class_
     self.classname = classname
     self.section = 0
+    self.classyieldresult = []
     self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
@@ -109,6 +110,7 @@ class interpreter:
       self.tok = None
 
   def arg(self, ret_list=False):
+    global local_vars
     value = ""
     if self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote):
       self.advance()
@@ -255,10 +257,26 @@ class interpreter:
     elif self.tok.value is not None and self.tok.value in constructors:
       class_name = self.tok.value
       args = dictionary()
+      temp_vars = copy(local_vars)
+      local_vars = dictionary()
+      self.advance()
       for i in arg[class_name]:
-        args.add(i, self.arg())
+        local_vars.add(i, self.arg())
       value = object(class_name, args)
-      interpreter(constructors[class_name], class_=True, classname=class_name).interpret()
+      a = interpreter(constructors[class_name], class_=True, classname=class_name)
+      b = a.classyieldresult
+      a.interpret()
+      for i in b:
+        if i[2] == "local":
+          value.local.add(i[0], i[1])
+        else:
+          value.global_.add(i[0], i[1])
+      local_vars = temp_vars
+      if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+        if self.tok.value is not None and self.tok.value in value.global_:
+          value = value.global_[self.tok.value]
+        else:
+          raise Exception(f"Illegal attribute of {class_name}")
       self.advance()
     elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
@@ -523,6 +541,36 @@ to your program?""")
             raise Exception("Expected EOL")
           if self.tok is not None:
             self.advance()
+        elif self.tok.value.lower() == "global" and self.class_:
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok is None or self.tok.type == token.TokenTypes.semi:
+            value = ""
+          elif self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            value = self.arg(True)
+            self.advance() if self.tok is not None and self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("No ; or EOL")
+          if self.tok is not None:
+            self.advance()
+          self.classyieldresult.append([name, value, "global"])
+        elif self.tok.value.lower() == "local" and self.class_ is True:
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok is None or self.tok.type == token.TokenTypes.semi:
+            value = ""
+          elif self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            value = self.arg(True)
+            self.advance() if self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("No ; or EOL")
+          if self.tok is not None:
+            self.advance()
+          self.classyieldresult.append([name, value, "local"])
         elif self.tok.value.lower() == "global":
           self.advance()
           name = self.tok.value
