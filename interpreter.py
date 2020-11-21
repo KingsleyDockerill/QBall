@@ -97,6 +97,8 @@ class interpreter:
     self.classname = classname
     self.section = 0
     self.classyieldresult = []
+    self.classglobals = dictionary()
+    self.classlocals = dictionary()
     self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
@@ -120,6 +122,88 @@ class interpreter:
     elif self.tok.type in (token.TokenTypes.integer, token.TokenTypes.floating):
       value = self.tok.value
       self.advance()
+    elif self.tok.value in self.classglobals:
+      name = self.tok.value
+      self.advance()
+      if self.tok is not None and self.tok.type == token.TokenTypes.lbrack:
+        self.advance()
+        index = self.arg()
+        if self.tok.type != token.TokenTypes.rbrack:
+          raise Exception("Expected [index]")
+        self.advance()
+        value = self.classglobals[name][index]
+      else:
+        value = self.classglobals[name]
+      if using["os"] and type(value) == os_obj:
+        # cmp using f string to prevent TypeError
+        if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
+          value = os_obj()
+        elif self.tok.value == "name":
+          value = os_obj().name
+          self.advance()
+        elif self.tok.value == "exists":
+          self.advance()
+          value = os_obj().exists(path=self.arg())
+      elif using["regex"] and type(value) == regex_obj:
+        self.advance()
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          raise Exception("regex requires 2 arguments")
+        regex = regex_obj(self.arg(), self.arg())
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          value = regex_obj()
+        elif self.tok.value == "findall":
+          value = re.findall(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "search":
+          value = re.search(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "sub":
+          self.advance()
+          value = re.sub(regex.regex, self.arg(), regex.string)
+          self.advance()
+        else:
+          raise Exception(f"regex object has no atrribute   {self.tok.value}")
+    elif self.tok.value in self.classlocals:
+      name = self.tok.value
+      self.advance()
+      if self.tok is not None and self.tok.type == token.TokenTypes.lbrack:
+        self.advance()
+        index = self.arg()
+        if self.tok.type != token.TokenTypes.rbrack:
+          raise Exception("Expected [index]")
+        self.advance()
+        value = self.classlocals[name][index]
+      else:
+        value = self.classlocals[name]
+      if using["os"] and type(value) == os_obj:
+        # cmp using f string to prevent TypeError
+        if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
+          value = os_obj()
+        elif self.tok.value == "name":
+          value = os_obj().name
+          self.advance()
+        elif self.tok.value == "exists":
+          self.advance()
+          value = os_obj().exists(path=self.arg())
+      elif using["regex"] and type(value) == regex_obj:
+        self.advance()
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          raise Exception("regex requires 2 arguments")
+        regex = regex_obj(self.arg(), self.arg())
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          value = regex_obj()
+        elif self.tok.value == "findall":
+          value = re.findall(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "search":
+          value = re.search(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "sub":
+          self.advance()
+          value = re.sub(regex.regex, self.arg(), regex.string)
+          self.advance()
+        else:
+          raise Exception(f"regex object has no atrribute   {self.tok.value}")
     elif self.tok.value in global_vars:
       name = self.tok.value
       self.advance()
@@ -261,17 +345,16 @@ class interpreter:
       local_vars = dictionary()
       self.advance()
       for i in arg[class_name]:
-        local_vars.add(i, self.arg())
+        a = self.arg()
+        local_vars.add(i, a)
       value = object(class_name, args)
       a = interpreter(constructors[class_name], class_=True, classname=class_name)
-      b = a.classyieldresult
+      global_ = a.classglobals
+      local = a.classlocals
       a.interpret()
-      for i in b:
-        if i[2] == "local":
-          value.local.add(i[0], i[1])
-        else:
-          value.global_.add(i[0], i[1])
       local_vars = temp_vars
+      value.global_ = global_
+      value.local = local
       if self.tok is not None and self.tok.type != token.TokenTypes.semi:
         if self.tok.value is not None and self.tok.value in value.global_:
           value = value.global_[self.tok.value]
@@ -555,7 +638,7 @@ to your program?""")
             raise Exception("No ; or EOL")
           if self.tok is not None:
             self.advance()
-          self.classyieldresult.append([name, value, "global"])
+          self.classglobals.add(name, value)
         elif self.tok.value.lower() == "local" and self.class_ is True:
           self.advance()
           name = self.tok.value
@@ -570,7 +653,7 @@ to your program?""")
             raise Exception("No ; or EOL")
           if self.tok is not None:
             self.advance()
-          self.classyieldresult.append([name, value, "local"])
+          self.classlocals.add(name, value)
         elif self.tok.value.lower() == "global":
           self.advance()
           name = self.tok.value
