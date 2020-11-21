@@ -358,9 +358,9 @@ class interpreter:
       if self.tok is not None and self.tok.type != token.TokenTypes.semi:
         if self.tok.value is not None and self.tok.value in value.global_:
           value = value.global_[self.tok.value]
+          self.advance()
         else:
           raise Exception(f"Illegal attribute of {class_name}")
-      self.advance()
     elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()

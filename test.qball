@@ -1,4 +1,12 @@
-*mynewobj;
-  out "test";
+*mynewobj a ((Objects can now have arguments));
+  $ A can now be accessed outside of the class, see below
+  global a = a;
+  $ This can only be accessed inside the function
+  local b = 0;
+  out a;
+  out b;
 end
-global a = mynewob
+global c = mynewobj "test";
+global d = mynewobj "test" a;
+$ Raises error
+global e = mynewobj "test" b
