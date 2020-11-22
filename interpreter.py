@@ -89,7 +89,7 @@ ends = ["for", "while", "if", "try"]
 EOF = -1
 
 class interpreter:
-  def __init__(self, toks, func=False, class_=False, classname=""):
+  def __init__(self, toks, func=False, class_=False, classname="", return_val=False):
     global debug
     self.toks = iter(toks)
     self.func = func
@@ -100,6 +100,7 @@ class interpreter:
     self.classglobals = dictionary()
     self.classlocals = dictionary()
     self.classfuncs = dictionary()
+    self.return_val = return_val
     self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
@@ -368,6 +369,52 @@ class interpreter:
           self.advance()
         else:
           raise Exception(f"Illegal attribute of {class_name}")
+    elif self.tok.value in function:
+      funcname = self.tok.value
+      self.advance()
+      temp_vars = copy(local_vars)
+      local_vars = dictionary()
+      for i in arg[funcname]:
+        value = ""
+        if self.tok.value in local_vars:
+          value = local_vars[self.tok.value]
+          argvars.add(i, ["local", self.tok.value])
+          self.advance()
+        elif self.tok.value in global_vars:
+          value = global_vars[self.tok.value]
+          argvars.add(i, ["global", self.tok.value])
+          self.advance()
+        else:
+          if i == "mulargs":
+            value = []
+            while self.tok.type != token.TokenTypes.semi:
+              value.append(self.arg())
+            self.advance()
+          else:
+            value = self.arg()
+        local_vars.add(i, value)
+      try:
+        interpreter(function[funcname], True, return_val=True).interpret()
+      except FunctionReturn as f:
+        value = f.args[0]
+      local_vars = temp_vars
+      try:
+        times = int(funcname.split("_")[0][1:])
+        if funcname.split("_")[0][0] != "U":
+          raise Exception("")
+        if funcname not in limited_funcs:
+          limited_funcs.add(funcname, times - 1)
+        else:
+          limited_funcs[funcname] -= 1
+        if not limited_funcs[funcname]:
+          function.remove(funcname)
+          argvars.remove(funcname)
+      except:
+        pass
+      if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+        raise Exception("Expected ; or EOL")
+      if self.tok is not None and self.tok.type == token.TokenTypes.semi:
+        self.advance()
     elif self.tok.value is not None and self.tok.value.lower() == "math":
       mathstr = ""
       self.advance()
@@ -1243,21 +1290,29 @@ to your program?""")
             self.advance()
         elif self.tok.value == "return" and self.func:
           self.advance()
-          name = self.tok.value
-          globalv = True if argvars[name][0] == "global" else False
-          name = argvars[name][1]
-          self.advance()
-          val = self.arg()
-          if not globalv:
-            local_vars[name] = val
+          if self.return_val:
+            return_ = self.arg()
+            if self.tok is not None and self.tok.type !=  self.tok.type != token.TokenTypes.semi:
+              raise Exception("Expected ; or EOL")
+            if self.tok is not None:
+              self.advance()
+            raise FunctionReturn(return_)
           else:
-            global_vars[name] = val
-          self.advance()
-          if self.tok is not None and self.tok.type != self.tok.type != token.TokenTypes.semi:
-            raise Exception("Expected ; or EOL")
-          if self.tok is not None:
+            name = self.tok.value
+            globalv = True if argvars[name][0] == "global" else   False
+            name = argvars[name][1]
             self.advance()
-          raise FunctionReturn
+            val = self.arg()
+            if not globalv:
+              local_vars[name] = val
+            else:
+              global_vars[name] = val
+            self.advance()
+            if self.tok is not None and self.tok.type !=  self.tok.type != token.TokenTypes.semi:
+              raise Exception("Expected ; or EOL")
+            if self.tok is not None:
+              self.advance()
+            raise FunctionReturn
         elif self.tok.value == "return":
           raise Exception("return outside of function")
         elif self.tok.value == "import":
