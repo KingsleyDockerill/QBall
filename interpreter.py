@@ -468,7 +468,7 @@ to your program?""")
         if type(i) == str:
           string += f"'{i}' "
         else:
-          string += str(i)
+          string += f"{i} "
       value = string + "\b]"
     elif type(value) == tuple and not ret_list:
       string = "("
