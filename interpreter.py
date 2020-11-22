@@ -99,6 +99,7 @@ class interpreter:
     self.classyieldresult = []
     self.classglobals = dictionary()
     self.classlocals = dictionary()
+    self.classfuncs = dictionary()
     self.tok = token.Result(token.TokenTypes.eof)
     self.advance()
 
@@ -345,7 +346,13 @@ class interpreter:
       local_vars = dictionary()
       self.advance()
       for i in arg[class_name]:
-        a = self.arg()
+        if i == "mulargs":
+          a = []
+          while self.tok.type != token.TokenTypes.semi:
+            a.append(self.arg())
+          self.advance()
+        else:
+          a = self.arg()
         local_vars.add(i, a)
       value = object(class_name, args)
       a = interpreter(constructors[class_name], class_=True, classname=class_name)
@@ -1063,7 +1070,13 @@ to your program?""")
               argvars.add(i, ["global", self.tok.value])
               self.advance()
             else:
-              value = self.arg()
+              if i == "mulargs":
+                value = []
+                while self.tok.type != token.TokenTypes.semi:
+                  value.append(self.arg())
+                self.advance()
+              else:
+                value = self.arg()
             local_vars.add(i, value)
           try:
             interpreter(function[funcname], True).interpret()
