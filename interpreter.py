@@ -303,6 +303,9 @@ class interpreter:
     elif self.tok.value == "argc":
       value = len(sys.argv)
       self.advance()
+    elif self.tok.value == "time":
+      value = time.time()
+      self.advance()
     elif self.tok.value == "in":
       self.advance()
       value = input(self.arg())
@@ -445,14 +448,10 @@ class interpreter:
           mathstr += str(self.tok.value)
         elif self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote):
           mathstr += self.arg()
-        elif self.tok.value in global_vars and type(global_vars[self.tok.value]) == int:
+        elif self.tok.value in global_vars and type(global_vars[self.tok.value]) in (int, float, str):
           mathstr += str(global_vars[self.tok.value])
-        elif self.tok.value in local_vars and type(local_vars[self.tok.value]) == int:
+        elif self.tok.value in local_vars and type(local_vars[self.tok.value]) in (int, float, str):
           mathstr += str(local_vars[self.tok.value])
-        elif self.tok.value in global_vars and type(global_vars[self.tok.value]) == str:
-          mathstr += f"'{global_vars[self.tok.value]}'"
-        elif self.tok.value in local_vars and type(local_vars[self.tok.value]) == str:
-          mathstr += f"'{local_vars[self.tok.value]}'"
         else:
           raise Exception("Illegal math operator!")
         self.advance()
