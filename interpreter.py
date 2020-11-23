@@ -81,6 +81,7 @@ function = dictionary()
 arg = dictionary()
 argvars = dictionary()
 limited_funcs = dictionary()
+class_funcs = dictionary()
 debug = False
 using = {"os": False, "regex": False, "server": False,"client": False}
 constructors = dictionary()
@@ -370,6 +371,28 @@ class interpreter:
         if self.tok.value is not None and self.tok.value in value.global_:
           value = value.global_[self.tok.value]
           self.advance()
+        elif self.tok.value in class_funcs[class_name]:
+          funcname = self.tok.value
+          self.advance()
+          for i in arg[funcname]:
+            value = ""
+            if i == "mulargs":
+              value = []
+              while self.tok.type != token.TokenTypes.semi:
+                value.append(self.arg())
+              self.advance()
+            else:
+              value = self.arg()
+            local_vars.add(i, value)
+          try:
+            a = interpreter(class_funcs[class_name][funcname], True, return_val=True, class_=True, classname=class_name)
+            a.classglobals = value.global_
+            a.classlocals = value.local
+            a.interpret()
+            value.global_ = a.classglobals
+            value.local = a.classlocals
+          except FunctionReturn as f:
+            value = f.args[0]
         else:
           raise Exception(f"Illegal attribute of {class_name}")
     elif self.tok.value in function:
@@ -379,25 +402,17 @@ class interpreter:
       local_vars = dictionary()
       for i in arg[funcname]:
         value = ""
-        if self.tok.value in local_vars:
-          value = local_vars[self.tok.value]
-          argvars.add(i, ["local", self.tok.value])
-          self.advance()
-        elif self.tok.value in global_vars:
-          value = global_vars[self.tok.value]
-          argvars.add(i, ["global", self.tok.value])
+        if i == "mulargs":
+          value = []
+          while self.tok.type != token.TokenTypes.semi:
+            value.append(self.arg())
           self.advance()
         else:
-          if i == "mulargs":
-            value = []
-            while self.tok.type != token.TokenTypes.semi:
-              value.append(self.arg())
-            self.advance()
-          else:
-            value = self.arg()
+          value = self.arg()
         local_vars.add(i, value)
       try:
         interpreter(function[funcname], True, return_val=True).interpret()
+        value = None
       except FunctionReturn as f:
         value = f.args[0]
       local_vars = temp_vars
@@ -1367,24 +1382,50 @@ to your program?""")
         self.advance()
         func_name = self.tok.value
         self.advance()
-        args = []
-        toks = []
-        while self.tok.type != token.TokenTypes.semi:
-          args.append(self.tok.value)
-          self.advance()
-        arg.add(func_name, args)
-        self.advance()
-        while self.tok is not None and self.tok.value != "end":
-          if self.tok.value in ends:
-            e = self.ends_in_func()
-            for i in e:
-              toks.append(i)
-          else:
-            toks.append(self.tok)
+        if func_name.split(":")[0] in constructors:
+          classname = func_name.split(":")[0]
+          try:
+            func_name = func_name.split(":")[1]
+          except IndexError:
+            raise Exception("Function name cannot share class name")
+          args = []
+          toks = []
+          while self.tok.type != token.TokenTypes.semi:
+            args.append(self.tok.value)
             self.advance()
-        self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
-        self.advance() if self.tok is not None and self.tok.value == "end" else print(end="")
-        function.add(func_name, toks)
+          arg.add(func_name, args)
+          self.advance()
+          while self.tok is not None and self.tok.value !=  "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              toks.append(self.tok)
+              self.advance()
+          self.advance() if self.tok is not None and  self.tok.value == "end" else print(end="")
+          self.advance() if self.tok is not None and  self.tok.value == "end" else print(end="")
+          class_funcs[classname] = dictionary()
+          class_funcs[classname].add(func_name, toks)
+        else:
+          args = []
+          toks = []
+          while self.tok.type != token.TokenTypes.semi:
+            args.append(self.tok.value)
+            self.advance()
+          arg.add(func_name, args)
+          self.advance()
+          while self.tok is not None and self.tok.value !=  "end":
+            if self.tok.value in ends:
+              e = self.ends_in_func()
+              for i in e:
+                toks.append(i)
+            else:
+              toks.append(self.tok)
+              self.advance()
+          self.advance() if self.tok is not None and  self.tok.value == "end" else print(end="")
+          self.advance() if self.tok is not None and  self.tok.value == "end" else print(end="")
+          function.add(func_name, toks)
       elif self.tok.type == token.TokenTypes.multiply:
         self.advance()
         class_name = self.tok.value
