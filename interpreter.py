@@ -289,6 +289,39 @@ class interpreter:
           self.advance()
         else:
           raise Exception(f"regex object has no atrribute   {self.tok.value}")
+    elif self.tok is not None and self.tok.type != token.TokenTypes.semi and type(value) == object:
+      class_name = value.name_
+      args = dictionary()
+      temp_vars = copy(local_vars)
+      local_vars = dictionary()
+      local_vars = temp_vars
+      if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+        if self.tok.value is not None and self.tok.value in  value.global_:
+          value = value.global_[self.tok.value]
+          self.advance()
+        elif self.tok.value in class_funcs[class_name]:
+          funcname = self.tok.value
+          self.advance()
+          for i in arg[funcname]:
+            value = ""
+            if i == "mulargs":
+              value = []
+              while self.tok.type != token.TokenTypes.semi:
+                value.append(self.arg())
+            else:
+              value = self.arg()
+            local_vars.add(i, value)
+          try:
+            a = interpreter(class_funcs[class_name][funcname,  True], return_val=True, class_=True, classname=class_name)
+            a.classglobals = value.global_
+            a.classlocals = value.local
+            a.interpret()
+            value.global_ = a.classglobals
+            value.local = a.classlocals
+          except FunctionReturn as f:
+            value = f.args[0]
+        else:
+          raise Exception(f"Illegal attribute of {class_name}")
     elif self.tok.value == "True":
       value = 1
       self.advance()
@@ -975,6 +1008,164 @@ to your program?""")
           if type(tempvalue) != list:
             raise Exception("Non-list value assigned to list!")
           global_vars.add(name, tempvalue)
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value in self.classglobals:
+          name = self.tok.value
+          self.advance()
+          if self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            self.classglobals[name] = self.arg()
+          elif self.tok.type == token.TokenTypes.lbrack:
+            self.advance()
+            index = self.arg()
+            if self.tok.type != token.TokenTypes.rbrack:
+              raise Exception("Expected [index]")
+            self.advance()
+            if self.tok.type != token.TokenTypes.equal:
+              raise Exception("Expected [index] = arg")
+            self.advance()
+            a = self.arg()
+            try:
+              self.classglobals[name][index] = a
+            except:
+              try:
+                self.classglobals[name].insert(index, a)
+              except AttributeError:
+                try:
+                  self.classglobals[name] = "".join(list(self.classglobals[name]).insert(index, a))
+                except IndexError:
+                  self.classglobals[name] += str(a)
+          elif self.tok.type == token.TokenTypes.plus:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] += self.arg()
+            else:
+              raise Exception("After + expected =")
+          elif self.tok.type == token.TokenTypes.minus:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] -= self.arg()
+            else:
+              raise Exception("After - expected =")
+          elif self.tok.type == token.TokenTypes.multiply:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] *= self.arg()
+            else:
+              raise Exception("After * expected =")
+          elif self.tok.type == token.TokenTypes.divide:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] /= self.arg()
+            else:
+              raise Exception("After / expected =")
+          elif self.tok.type == token.TokenTypes.and_:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] &= self.arg()
+            else:
+              raise Exception("After & expected =")
+          elif self.tok.type == token.TokenTypes.or_:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] |= self.arg()
+            else:
+              raise Exception("After | expected =")
+          elif self.tok.type == token.TokenTypes.xor:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classglobals[name] ^= self.arg()
+            else:
+              raise Exception("After ^ expected =")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
+        elif self.tok.value in self.classlocals:
+          name = self.tok.value
+          self.advance()
+          if self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            self.classlocals[name] = self.arg()
+          elif self.tok.type == token.TokenTypes.lbrack:
+            self.advance()
+            index = self.arg()
+            if self.tok.type != token.TokenTypes.rbrack:
+              raise Exception("Expected [index]")
+            self.advance()
+            if self.tok.type != token.TokenTypes.equal:
+              raise Exception("Expected [index] = arg")
+            self.advance()
+            a = self.arg()
+            try:
+              self.classlocals[name][index] = a
+            except:
+              try:
+                self.classlocals[name].insert(index, a)
+              except AttributeError:
+                try:
+                  self.classlocals[name] = "".join(list(self.classlocals[name]).insert(index, a))
+                except IndexError:
+                  self.classlocals[name] += str(a)
+          elif self.tok.type == token.TokenTypes.plus:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] += self.arg()
+            else:
+              raise Exception("After + expected =")
+          elif self.tok.type == token.TokenTypes.minus:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] -= self.arg()
+            else:
+              raise Exception("After - expected =")
+          elif self.tok.type == token.TokenTypes.multiply:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] *= self.arg()
+            else:
+              raise Exception("After * expected =")
+          elif self.tok.type == token.TokenTypes.divide:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] /= self.arg()
+            else:
+              raise Exception("After / expected =")
+          elif self.tok.type == token.TokenTypes.and_:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] &= self.arg()
+            else:
+              raise Exception("After & expected =")
+          elif self.tok.type == token.TokenTypes.or_:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] |= self.arg()
+            else:
+              raise Exception("After | expected =")
+          elif self.tok.type == token.TokenTypes.xor:
+            self.advance()
+            if self.tok.type == token.TokenTypes.equal:
+              self.advance()
+              self.classlocals[name] ^= self.arg()
+            else:
+              raise Exception("After ^ expected =")
           if self.tok is not None and self.tok.type != token.TokenTypes.semi:
             raise Exception("Expected EOL")
           if self.tok is not None:

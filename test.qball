@@ -1,7 +1,9 @@
 *myobj;
-  global a = 5;
+  global a = "Hello, world!";
 end
-_myobj:test;
+_myobj:hello;
   out a;
+  return "Completed!" $ This is not required
 end
-global a = myobj test
+global a = myobj hello;
+out a
