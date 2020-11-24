@@ -10,6 +10,7 @@ import threading
 import requests
 import string
 import sys
+import random
 
 class dictionary(dict):
   def __init__(self):
@@ -307,9 +308,9 @@ class interpreter:
             if i == "mulargs":
               value = []
               while self.tok.type != token.TokenTypes.semi:
-                value.append(self.arg())
+                value.append(self.arg(ret_list=True))
             else:
-              value = self.arg()
+              value = self.arg(ret_list=True)
             local_vars.add(i, value)
           try:
             a = interpreter(class_funcs[class_name][funcname,  True], return_val=True, class_=True, classname=class_name)
@@ -364,6 +365,16 @@ class interpreter:
     elif self.tok.value == "tuple":
       self.advance()
       value = tuple(self.arg(True))
+    elif self.tok.value == "seed":
+      self.advance()
+      random.seed(self.arg())
+      value = None
+    elif self.tok.value == "rand":
+      self.advance()
+      value = random.random()
+    elif self.tok.value == "randint":
+      self.advance()
+      value = random.randint(int(f"-{sys.maxsize}"), sys.maxsize)
     elif self.tok.value == "try":
       self.advance()
       tokens = []
