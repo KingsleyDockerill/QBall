@@ -1363,6 +1363,27 @@ to your program?""")
             raise Exception("Expected ; or EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
+        elif self.func and self.tok.value in class_funcs[self.classname]:
+          funcname = self.tok.value
+          self.advance()
+          for i in arg[funcname]:
+            value = ""
+            if i == "mulargs":
+              value = []
+              while self.tok.type != token.TokenTypes.semi:
+                value.append(self.arg(ret_list=True))
+            else:
+              value = self.arg(ret_list=True)
+            local_vars.add(i, value)
+          try:
+            a = interpreter(class_funcs[self.classname][funcname,  True], return_val=True, class_=True, classname=self.classname)
+            a.classglobals = self.classglobals
+            a.classlocals = self.classlocals
+            a.interpret()
+            value.global_ = a.classglobals
+            value.local = a.classlocals
+          except FunctionReturn as f:
+            value = f.args[0]
         elif self.tok.value == "thread":
           self.advance()
           funcname = self.tok.value
