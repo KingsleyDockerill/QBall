@@ -1363,7 +1363,7 @@ to your program?""")
             raise Exception("Expected ; or EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
-        elif self.tok.value in class_funcs[self.classname]:
+        elif self.class_ and self.tok.value in class_funcs[self.classname]:
           funcname = self.tok.value
           self.advance()
           for i in arg[funcname]:
