@@ -1363,7 +1363,7 @@ to your program?""")
             raise Exception("Expected ; or EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
-        elif self.func and self.tok.value in class_funcs[self.classname]:
+        elif self.tok.value in class_funcs[self.classname]:
           funcname = self.tok.value
           self.advance()
           for i in arg[funcname]:
@@ -1376,14 +1376,15 @@ to your program?""")
               value = self.arg(ret_list=True)
             local_vars.add(i, value)
           try:
-            a = interpreter(class_funcs[self.classname][funcname,  True], return_val=True, class_=True, classname=self.classname)
+            a = interpreter(class_funcs[self.classname][funcname], return_val=True, class_=True, classname=self.classname)
             a.classglobals = self.classglobals
             a.classlocals = self.classlocals
             a.interpret()
-            value.global_ = a.classglobals
-            value.local = a.classlocals
+            self.classglobals = a.classglobals
+            self.classlocals = a.classlocals
           except FunctionReturn as f:
             value = f.args[0]
+          self.advance()
         elif self.tok.value == "thread":
           self.advance()
           funcname = self.tok.value
@@ -1600,6 +1601,9 @@ to your program?""")
           if self.tok is not None:
             self.advance()
         else:
+          if debug:
+            print(self.classname)
+            print(class_funcs[self.classname])
           raise Exception(f"Illegal function {self.tok.value}")
       elif self.tok.type == token.TokenTypes.underscore:
         self.advance()
@@ -1628,8 +1632,11 @@ to your program?""")
               self.advance()
           self.advance() if self.tok is not None and  self.tok.value == "end" else print(end="")
           self.advance() if self.tok is not None and  self.tok.value == "end" else print(end="")
-          class_funcs[classname] = dictionary()
-          class_funcs[classname].add(func_name, toks)
+          try:
+            class_funcs[classname].add(func_name, toks)
+          except KeyError:
+            class_funcs[classname] = dictionary()
+            class_funcs[classname].add(func_name, toks)
         else:
           args = []
           toks = []
@@ -1676,4 +1683,6 @@ to your program?""")
         self.advance()
         self.advance()
       else:
+        if debug:
+          print(self.tok)
         raise Exception("Illegal token")

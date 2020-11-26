@@ -1,9 +1,11 @@
-*myobj test;
-  global a = "Hello, world!";
+*test;
+  global a = 5;
 end
-_myobj:hello;
+_test:one;
   out a;
-  return "Completed!" $ This is not required
 end
-global a = myobj ["test"] hello;
-out a
+_test:two;
+  out a;
+  one;
+end
+global a = test two
