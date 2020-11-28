@@ -12,6 +12,8 @@ import string
 import sys
 import random
 
+# TEST
+
 class dictionary(dict):
   def __init__(self):
     self = dict(self)
