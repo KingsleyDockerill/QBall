@@ -1181,6 +1181,42 @@ to your program?""")
             raise Exception("Expected EOL")
           if self.tok is not None:
             self.advance()
+        elif self.tok.value == "alias":
+          self.advance()
+          if self.tok.value != None and self.tok.value == "function":
+            self.advance()
+            new_name = self.tok.value
+            self.advance()
+            try:
+              function.add(new_name, function[self.tok.value])
+              arg.add(new_name, arg[self.tok.value])
+            except KeyError:
+              raise Exception("Tried to alias a non-existant function")
+            self.advance()
+          elif self.tok.value != None and self.tok.value == "global":
+            self.advance()
+            new_name = self.tok.value
+            self.advance()
+            try:
+              global_vars[new_name] = global_vars[self.tok.value]
+            except KeyError:
+              raise Exception("Tried to alias a non-existant global variable")
+            self.advance()
+          elif self.tok.value != None and self.tok.value == "local":
+            self.advance()
+            new_name = self.tok.value
+            self.advance()
+            try:
+              local_vars[new_name] = local_vars[self.tok.value]
+            except KeyError:
+              raise Exception("Tried to alias a non-existant local variable")
+            self.advance()
+          else:
+            raise Exception("Unexpected specifier to alias")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("Expected EOL")
+          if self.tok is not None:
+            self.advance()
         elif self.tok.value == "if":
           self.advance()
           a = self.condition()
