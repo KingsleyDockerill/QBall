@@ -78,6 +78,7 @@ class LocalVar:
 
 global_vars = dictionary()
 local_vars = dictionary()
+static_vars = dictionary()
 function = dictionary()
 arg = dictionary()
 argvars = dictionary()
@@ -261,6 +262,47 @@ class interpreter:
         value = local_vars[name][index]
       else:
         value = local_vars[name]
+      if using["os"] and type(value) == os_obj:
+        # cmp using f string to prevent TypeError
+        if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
+          value = os_obj()
+        elif self.tok.value == "name":
+          value = os_obj().name
+          self.advance()
+        elif self.tok.value == "exists":
+          self.advance()
+          value = os_obj().exists(path=self.arg())
+      elif using["regex"] and type(value) == regex_obj:
+        self.advance()
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          raise Exception("regex requires 2 arguments")
+        regex = regex_obj(self.arg(), self.arg())
+        if self.tok is None or self.tok.value ==  token.TokenTypes.semi:
+          value = regex_obj()
+        elif self.tok.value == "findall":
+          value = re.findall(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "search":
+          value = re.search(regex.regex, regex.string)
+          self.advance()
+        elif self.tok.value == "sub":
+          self.advance()
+          value = re.sub(regex.regex, self.arg(), regex.string)
+          self.advance()
+        else:
+          raise Exception(f"regex object has no atrribute   {self.tok.value}")
+    elif self.tok.value in static_vars:
+      name = self.tok.value
+      self.advance()
+      if self.tok is not None and self.tok.type == token.TokenTypes.lbrack:
+        self.advance()
+        index = self.arg()
+        if self.tok.type != token.TokenTypes.rbrack:
+          raise Exception("Expected [index]")
+        self.advance()
+        value = static_vars[name][index]
+      else:
+        value = static_vars[name]
       if using["os"] and type(value) == os_obj:
         # cmp using f string to prevent TypeError
         if self.tok is None or f"{self.tok.value}" not in   ("name", "exists"):
@@ -798,6 +840,21 @@ to your program?""")
           local_vars.add(name, value)
         elif self.tok.value.lower() == "local":
           raise Exception("Local outside of function")
+        elif self.tok.value.lower() == "static":
+          self.advance()
+          name = self.tok.value
+          self.advance()
+          if self.tok is None or self.tok.type == token.TokenTypes.semi:
+            value = ""
+          elif self.tok.type == token.TokenTypes.equal:
+            self.advance()
+            value = self.arg(True)
+            self.advance() if self.tok is not None and self.tok.type in (token.TokenTypes.dquote, token.TokenTypes.squote) else print(end="")
+          if self.tok is not None and self.tok.type != token.TokenTypes.semi:
+            raise Exception("No ; or EOL")
+          if self.tok is not None:
+            self.advance()
+          static_vars.add(name, value)
         elif self.tok.value.lower() == "break":
           raise IllegalBreak("Illegal break")
         elif self.tok.value.lower() == "using":
