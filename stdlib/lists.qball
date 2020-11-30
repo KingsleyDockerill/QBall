@@ -40,3 +40,13 @@ _clear a;
   $ Return var a [];
   return a [];
 end
+_join stringarg joiner;
+  local a = "";
+  local c = 0;
+  for i in stringarg;
+    a += i;
+    a += joiner;
+    c += 1;
+  end
+  return a;
+end

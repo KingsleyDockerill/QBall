@@ -12,8 +12,6 @@ import string
 import sys
 import random
 
-# TEST
-
 class dictionary(dict):
   def __init__(self):
     self = dict(self)
@@ -645,6 +643,7 @@ to your program?""")
 
   def condition(self, temp=[]):
     cond = ""
+    in_string = False
     if len(temp) < 1:
       del temp
       while self.tok is not None and self.tok.type != token.TokenTypes.semi:
@@ -684,6 +683,7 @@ to your program?""")
           self.advanc()
         else:
           temp = self.arg(True)
+          temp.replace("\"", "\\\"").replace("\"", "\\'")
           cond += f"'{temp}'" if type(temp) == str else str(temp)
     else:
       i = 0
@@ -1340,7 +1340,10 @@ to your program?""")
               self.advance()
           self.advance()
           while a:
-            interpreter(toks).interpret()
+            try:
+              interpreter(toks).interpret()
+            except IllegalBreak:
+              break
             a = self.condition(conditional)
         elif self.tok.value == "until":
           self.advance()
@@ -1374,7 +1377,10 @@ to your program?""")
               self.advance()
           self.advance()
           while not a:
-            interpreter(toks).interpret()
+            try:
+              interpreter(toks).interpret()
+            except IllegalBreak:
+              break
             a = self.condition(conditional)
         elif self.tok.value == "try":
           self.advance()

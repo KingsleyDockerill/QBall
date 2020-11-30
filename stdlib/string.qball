@@ -143,18 +143,18 @@ _access stringarg num ret;
   return ret stringarg[num];
 end
 
-_join stringarg joiner ret;
+_join stringarg joiner;
   if !stringarg;
     raise "Join requires 1+ characters"
   end
   local a = "";
   local c = 0;
   for i in stringarg;
-    a += i;
+    a += str i;
     a += joiner;
     c += 1;
   end
-  return ret a;
+  return a;
 end
 
 _strip stringarg ret;
@@ -167,8 +167,3 @@ _strip stringarg ret;
     end
   end
   return ret string;
-<<<<<<< HEAD
-end
-=======
-end
->>>>>>> origin/master

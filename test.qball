@@ -1,4 +1,4 @@
-*test;
+((*test;
   global a = 5;
 end
 _test:one;
@@ -8,4 +8,18 @@ _test:two;
   out a;
   one;
 end
-global a = test two
+global a = test two))
+import lists;
+
+global inputs = [];
+global i = 0;
+while True;
+  global a = in "Enter something: ";
+  if a == "";
+    break;
+  else;
+    inputs[i] = a;
+    i += 1;
+  end
+end
+out inputs
