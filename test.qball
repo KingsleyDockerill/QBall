@@ -22,4 +22,4 @@ while True;
     i += 1;
   end
 end
-out inputs
+out join inputs ", "

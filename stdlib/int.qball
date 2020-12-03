@@ -1,6 +1,16 @@
-_roundup arg ret;
+((_roundup arg ret;
   if !arg;
     raise "roundup requires 1+ numbers"
   end
   return ret arg;
+end))
+_range low high step;
+  local result = [];
+  local i = 0;
+  while low <= high;
+    result[i] = low;
+    i += 1;
+    low +=step;
+  end
+  return result;
 end

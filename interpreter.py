@@ -597,19 +597,19 @@ to your program?""")
       self.advance()
       value = []
       while self.tok is not None and self.tok.type != token.TokenTypes.rbrack and self.tok.type != token.TokenTypes.semi:
-        a = self.arg()
+        a = self.arg(ret_list)
         value.append(a)
       self.advance() if self.tok.type != token.TokenTypes.semi else print(end="")
     elif self.tok.type == token.TokenTypes.and_:
       self.advance()
-      value = id(self.arg())
+      value = id(self.arg(True))
     else:
       raise Exception("Illegal argument")
     if type(value) != str and str(value) == "True":
       value = 1
     elif type(value) != str and str(value) == "False":
       value = 0
-    elif type(value) == list and not ret_list:
+    """elif type(value) == list and not ret_list:
       string = "["
       for i in value:
         if type(i) == str:
@@ -624,7 +624,7 @@ to your program?""")
           string += f"'{i}' "
         else:
           string += str(i)
-      value = string + "\b)"
+      value = string + "\b)"""
     return value
 
   # Since both functions and if/for/etc use end, this handles that

@@ -1,9 +1,9 @@
-_len a b;
+_len a;
   local c = 0;
   for i in a;
     c += 1;
   end
-  return b c;
+  return c;
 end
 _append a b;
   $ Append b to a
@@ -38,14 +38,17 @@ _insert a b c;
 end
 _clear a;
   $ Return var a [];
-  return a [];
+  return [];
 end
-_join stringarg joiner;
+_join listarg joiner;
   local a = "";
   local c = 0;
-  for i in stringarg;
+  local length = len listarg;
+  for i in listarg;
     a += i;
-    a += joiner;
+    if i != listarg[math length - 1];
+      a += joiner;
+    end
     c += 1;
   end
   return a;
