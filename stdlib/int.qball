@@ -10,7 +10,7 @@ _range low high step;
   while low <= high;
     result[i] = low;
     i += 1;
-    low +=step;
+    low += step;
   end
   return result;
 end

@@ -383,7 +383,7 @@ class interpreter:
     elif self.tok.value == "time":
       value = time.time()
       self.advance()
-    elif self.tok.value == "in":
+    elif self.tok.value == "input":
       self.advance()
       value = input(self.arg())
     elif self.tok.value == "py_eval":
