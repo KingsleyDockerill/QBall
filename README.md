@@ -55,3 +55,5 @@ The To-Do list for Qball!
 - [ ] Replace
 - [ ] Reverse
 > More at https://www.pythonforbeginners.com/basics/string-manipulation-in-python
+# CBall
+I think that I'll start spending my time on CBall (which may just be renamed CQBall later on). This implementation of QBall isn't complete, which is why I'll keep working on it a bit.

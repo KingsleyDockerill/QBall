@@ -407,10 +407,6 @@ class interpreter:
     elif self.tok.value == "tuple":
       self.advance()
       value = tuple(self.arg(True))
-    elif self.tok.value == "seed":
-      self.advance()
-      random.seed(self.arg())
-      value = None
     elif self.tok.value == "rand":
       self.advance()
       value = random.random()
@@ -1564,6 +1560,9 @@ to your program?""")
             raise Exception("No EOL")
           if self.tok is not None and self.tok.type == token.TokenTypes.semi:
             self.advance()
+        elif self.tok.value == "seed":
+          self.advance()
+          value = random.seed(self.arg())
         elif self.tok.value == "sys":
           self.advance()
           a = self.arg()
