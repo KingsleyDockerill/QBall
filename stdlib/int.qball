@@ -14,3 +14,7 @@ _range low high step;
   end
   return result;
 end
+_explode num;
+ local num2 = time;
+ return math num * num2;
+end
