@@ -72,9 +72,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ### Built With
 
-* []()
-* []()
-* []()
+* [foo](https://example.com)
+* [bar](https://example.com)
+* [baz](https://exmaple.com)
 
 <!-- GETTING STARTED -->
 ## Getting Started
