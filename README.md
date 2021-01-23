@@ -88,7 +88,7 @@ This is an example of how to list things you need to use the software and how to
 * pip
 
   ```sh
-  pip install qball-lang
+  $ pip install qball-lang
   ```
 
 ### Using the package
@@ -96,7 +96,7 @@ This is an example of how to list things you need to use the software and how to
 1. Import the package
 
    ```py
-   import QBall
+   $ import QBall
    ```
 
 2. You're done, now code some awesome things using QBall!
