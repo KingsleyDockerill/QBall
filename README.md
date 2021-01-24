@@ -149,7 +149,3 @@ Trello Board: [Trello/b/cJM6HsR3/qball](https://trello.com/b/cJM6HsR3/qball)
 
 * [Github/othneildrew/Best-README-Template](https://github.com/othneildrew/Best-README-Template "-An awesome README template to jumpstart your projects!")
 * [Shields.io](https://shields.io/ "Quality metadata badges for open source projects.")
-* []()
-
-<!-- MARKDOWN LINKS & IMAGES -->
-big ol placeholder
