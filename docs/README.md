@@ -4,7 +4,7 @@
   
   <p align="center">
     Welcome to the QBall Documentation!
-    <br />
+    <br>
     <a href="https://github.com/KingsleyDockerill/QBall/" rel="help"><strong>Home »</strong></a>
     ·
     <a href="https://github.com/KingsleyDockerill/QBall/issues" rel="next">Report Bug</a>
@@ -14,6 +14,8 @@
     <a href="https://trello.com/b/cJM6HsR3/qball" rel="external">Trello board</a>
     ·
     <a href="https://repl.it/@qballlang/QBall" rel="external">QBall Shell</a>
+   <br>
+   <a href="" rel="prev">
   </p>
   
    <p align="center">
