@@ -15,7 +15,9 @@
     ·
     <a href="https://repl.it/@qballlang/QBall" rel="external">QBall Shell</a>
    <br>
-   <a href="" rel="prev">
+   <a href="README.md#wel" rel="prev">« Back</a>
+   ·
+   <a href="example.md#ex" rel="next">Next »</a>
   </p>
   
    <p align="center">
