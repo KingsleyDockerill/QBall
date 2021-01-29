@@ -51,7 +51,7 @@
         <li><a href="example.md#rpy8bc">Run Python & 8Ball code</a></li>
       </ul>
     </li>
-    <li><a href="#math-op">Math Operators</a></li>
+    <li><a href="math.md#math">Math</a></li>
     <li><a href="#esc-char">Escape Characters</a></li>
     <li><a href="#comment">Comments</a></li>  
     <li><a href="#funct">Functions</a></li>
