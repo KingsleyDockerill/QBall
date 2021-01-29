@@ -52,19 +52,19 @@
       </ul>
     </li>
     <li><a href="math.md#math">Math</a></li>
-    <li><a href="#esc-char">Escape Characters</a></li>
-    <li><a href="#comment">Comments</a></li>  
-    <li><a href="#funct">Functions</a></li>
-    <li><a href="#if-else">If / Else</a></li>
-    <li><a href="#var">Varibles</a></li>
+    <li><a href="escape-character.md#esc-char">Escape Characters</a></li>
+    <li><a href="comment.md#comment">Comments</a></li>  
+    <li><a href="function.md#funct">Functions</a></li>
+    <li><a href="if-else.md#if-else">If / Else</a></li>
+    <li><a href="variables.md#var">Variables</a></li>
     <li>
-      <a href="#io">Input and Output</a>
+      <a href="input-output.md#io">Input and Output</a>
       <ul>
-        <li><a href="#out">Outputting</a></li>
-        <li><a href="#in">Input</a></li>
+        <li><a href="input-output.md#out">Outputting</a></li>
+        <li><a href="input-output.md#in">Input</a></li>
       </ul>
     </li>
-    <li><a href="#data-type">Data types</a></li>
+    <li><a href="data-type.md#data-type">Data types</a></li>
     <li><a href="#esc-char-tbl">Escape character table</a></li>
     <li><a href="#op-tbl">Operator table</a></li>
   </ol>
