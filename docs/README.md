@@ -66,7 +66,7 @@
     </li>
     <li><a href="data-type.md#data-type">Data types</a></li>
     <li><a href="escape-character-table.md#esc-char-tbl">Escape character table</a></li>
-    <li><a href="#op-tbl">Operator table</a></li>
+    <li><a href="operator-table.md#op-tbl">Operator table</a></li>
   </ol>
 </details>
 
