@@ -64,9 +64,13 @@
         <li><a href="#in">Input</a></li>
       </ul>
     </li>
-    <li><a href="#semicolon">Semicolons</a></li>
     <li><a href="#data-type">Data types</a></li>
     <li><a href="#esc-char-tbl">Escape character table</a></li>
     <li><a href="#op-tbl">Operator table</a></li>
   </ol>
 </details>
+
+<!-- WELCOME-->
+<h1 id="wel">Welcome</h1>
+
+Welcome to the offical QBall documentation! To start click one of the links above!
