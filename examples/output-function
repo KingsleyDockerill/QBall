@@ -1,0 +1,12 @@
+((This will create a function that will output a single argut.))men
+
+$ outarg function
+_outarg a;
+  out a;
+end
+
+$ Output floating points, strings, int, lists
+outarg "Hello, world!"
+outarg 5
+outarg 5.5
+outarg ["Hello, world!", "Hello, again!"]
