@@ -1,0 +1,9 @@
+((This will output every element in a string or list))
+
+_iterarg a;
+  for i in a;
+    out i;
+  end
+end
+
+iterarg ["Hello, world!" 5 ["Hello" "Hi"] 5.5]
