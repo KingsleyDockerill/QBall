@@ -43,12 +43,12 @@
       <a href="README.md#wel">Welcome</a>
     </li>
     <li>
-      <a href="#ex">Examples</a>
+      <a href="example.md#ex">Examples</a>
       <ul>
-        <li><a href="#ex-hw">Hello World</a></li>
-        <li><a href="#ex-of">Output function</a></li>
-        <li><a href="#ex-oe">Output Elements</a></li>
-        <li><a href="#ex-rpy8bc">Run Python & 8Ball code</a></li>
+        <li><a href="example.md#hw">Hello World</a></li>
+        <li><a href="example.md#of">Output function</a></li>
+        <li><a href="exmaple.md#oe">Output Elements</a></li>
+        <li><a href="example.md#rpy8bc">Run Python & 8Ball code</a></li>
       </ul>
     </li>
     <li><a href="#math-op">Math Operators</a></li>
