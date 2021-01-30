@@ -73,12 +73,12 @@
 <!-- WELCOME-->
 <h1 id="wel">Welcome</h1>
 
-Welcome to the offical QBall documentation! To start click one of the links above!
+Welcome to the official QBall documentation! To start, click one of the links above!
 
 <!-- EXAMPLES-->
 <h2 id="ex">Examples</h2>
 
-> __NOTE:__ Even though it looks simular, these are written in QBall <code>.qball</code>, not python <code>.py</code>.
+> __NOTE:__ Even though it looks similar, these are written in QBall <code>.qball</code>, not python <code>.py</code>.
 
 <!-- HELLO WORLD-->
 <h3 id="ex-hw">Hello World <small><a href="../examples/hello-world.qball">&#60;&#47;&#62;</a></small></h3>
@@ -139,7 +139,7 @@ py b
 
 QBall has operators for all common arithmetic operations
 such as addition and multiplication and also bit manipulation.
-To do math do <code>out math 5 + 5;</code> the semicolon is nessasarry
+To do math do <code>out math 5 + 5;</code> the semicolon is necessary
 or else the program will exit with <code><span style="color:#c80509">Illegal math operator!</span></code>.
 Math will work as an argument for any function.
 
@@ -148,17 +148,13 @@ Math will work as an argument for any function.
 
 <p style="font-style: italic;"><em><small>Also see, <a href="#escape-character-table">escape character table</a></small></em></p>
 
-One cool thing you can do with strings is use an escape character. The escape character in QBall is a backslash.
+One cool thing you can do with strings is using an escape character.
+The escape character in QBall is a backslash.
 If a certain character is behind the backslash the section will be replaced.
 
-For example you can turn this
-, <code>"Jack said "Hello, world!""</code>
-into this <code>"Jack said \"Hello, world\""</code>,
-or without escape characters,
-<code>Jack said "Hello, world!"'</code>
-
-Pretty amazing right? Below you will see a table of the escape characters QBall
-can use and its uses. If you have any questions go to the FAQ.
+For example, you can turn this, <code>"Jack said, "Hello, world! ""</code>.
+Into this <code>"Jack said \"Hello, world!\""</code>, or without escape characters,
+<code>'Jack said "Hello, world!"'</code>.
 
 <!-- COMMENTS -->
 <h2 id="comment">Comments</h2>
@@ -175,7 +171,7 @@ else;
 end
 </pre>
 
-To use multiple ... {(())}
+To use multiline comments. <!-- NOT | WIP -->
 
 <!-- FUNCTIONS -->
 <h2 id="funct">Functions</h2>
@@ -200,7 +196,7 @@ outarg "Hello, world!" $ Output: Hello, world!
 <p style="font-style: italic;"><em><small>Also see, <a href="#operator-table">operator table</a></small></em></p>
 
 The syntax of an if...else block is slightly different in QBall from Python.
-Notice how theres only an <code>end</code> at the ends of the if...else/ if statment.
+Notice how there's only an <code>end</code> at the ends of the if...else statment.
 
 <pre>
 x = 481
@@ -223,7 +219,7 @@ if x == 100;
 end
 </pre>
 
-<!-- VARIBLES -->
+<!-- VARIABLES -->
 <h2 id="var">Varibles</h2>
 
 <p style="font-style: italic;"><em><small>Also see, <a href="#data-type">date types</a></small></em></p>
@@ -232,12 +228,10 @@ end
 <strong>global</strong> <em>name</em> = <em>value</em>
 </pre>
 
-Declares a varible named <code><em>name</em></code>
-with the value of <code><em>value</em></code>.
+Declares a variable named <code><em>name</em></code> with the value of <code><em>value</em></code>.
 
-To declare varibles, you use the <code><em>global</em></code> token,
-and to assign <code><em>value</em></code> to variables you use an equal sign
-character <code>=</code>.
+To declare variables, you use the <code><em>global</em></code> token,
+and to assign <code><em>value</em></code> to variables you use an equal sign character <code>=</code>.
 
 <pre>
 global foo = 6;          $ Iteger
@@ -255,8 +249,7 @@ out quux;   $ true
 
 <!-- INPUT AND OUTPUT -->
 <h2 id="io">Input and Output</h2>
-This section will discuss about methods of
-getting input from the user and log
+This section will discuss  methods of getting input from the user and log
 data to the terminal.
 
 <!-- OUTPUT -->
@@ -266,13 +259,10 @@ data to the terminal.
 <strong>out</strong> <em>data</em>, sep=<em>" "</em>
 </pre>
 
-Logs <code><em>data</em></code> to the terminal,
-separated by using <code><em>sep</em></code>.
-If <code><em>sep</em></code> is present,
-it must be given an argument.
+Logs <code><em>data</em></code> to the terminal, separated by using <code><em>sep</em></code>.
+If <code><em>sep</em></code> is present,it must be given an argument.
 
-All non-string data from <code><em>data</em></code>
-are automaticlly converted to a string.
+All non-string data from <code><em>data</em></code> are automatically converted to a string.
 
 <pre>
 out "Hello, world!"; $ Hello, world!
@@ -288,9 +278,8 @@ out "Hello," "world!" sep="\n"; $ Hello,
 <strong>in</strong> <em>prompt</em>
 </pre>
 
-Get's user input and returns it as a string.
-<code><em>prompt</em></code> is displayed when
-the user is prompted to input data.
+Get's user input and returns it as a string. <code><em>prompt</em></code>
+is displayed when the user is prompted to input data.
 
 <pre>
 out "You entered " input "Enter something: ";
@@ -561,3 +550,5 @@ $ egg!
   </tr>
 </tbody>
 </table>
+
+
