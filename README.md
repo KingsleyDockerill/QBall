@@ -6,7 +6,7 @@
   <p align="center">
     QBall is a high-level interpreted language written in Python. It is object oriented and has an easy to learn and use syntax.
     <br />
-    <a href="https://github.com/KingsleyDockerill/QBall/blob/master/doc/README.md" rel="help"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/KingsleyDockerill/QBall/blob/master/docs/README.md" rel="help"><strong>Explore the docs »</strong></a>
     ·
     <a href="https://github.com/KingsleyDockerill/QBall/issues" rel="next">Report Bug</a>
     ·
