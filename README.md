@@ -1,6 +1,5 @@
-<br />
+<br>
 <p align="center">
-   <!-- LOGO HERE -->
    <h3 align="center">QBall</h3>
   
   <p align="center">
@@ -61,32 +60,32 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+<h1 id="about-the-project">About The Project</h1>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 <!-- GETTING STARTED -->
-## Getting Started
+<h2 id="getting-started">Getting Started</h2>
 
 To install QBall follow these simple steps.
 
-### Prerequisites
+<h3 id="prerequisites">Prerequisites</h3>
 
 This is an example of how to list things you need to use the software and how to install them.
 
 * pip
 
-  ```sh
-  $ pip install qball-lang
-  ```
+    <pre>
+    $pip install qball-lang
+    </pre>
 
-### Using the package
+<h3 id="using-the-package">Using the package</h3>
 
 1. Import the package
 
-   ```py
-   $ import QBall
-   ```
+   <pre>
+   $import QBall
+   </pre>
 
 2. You're done, now code some awesome things using QBall!
 
@@ -99,7 +98,7 @@ This is an example of how to list things you need to use the software and how to
    ```
 
 <!-- CONTRIBUTING -->
-## Contributing
+<h2 id="contributing">Contributing</h2>
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -110,19 +109,19 @@ Contributions are what make the open source community such an amazing place to b
 5. Open a Pull Request
 
 <!-- LICENSE -->
-## License
+<h2 id="license">License</h2>
 
 Distributed under the GPL-3.0 License. See [`LICENSE`](https://github.com/KingsleyDockerill/QBall/blob/master/LICENSE) for more information.
 
 <!-- CONTACT -->
-## Contact
+<h2 id="contact">Contact</h2>
 
 Project Link: [Github/KingsleyDockerill/QBall](https://github.com/KingsleyDockerill/QBall)
 
 Trello Board: [Trello/b/cJM6HsR3/qball](https://trello.com/b/cJM6HsR3/qball)
 
 <!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
+<h2 id="Acknowledgements">Acknowledgements</h2>
 
 * [Github/othneildrew/Best-README-Template](https://github.com/othneildrew/Best-README-Template "-An awesome README template to jumpstart your projects!")
 * [Shields.io](https://shields.io/ "Quality metadata badges for open source projects.")
