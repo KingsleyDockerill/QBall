@@ -495,18 +495,18 @@ $ egg!
   <tr>
     <td><code>#</code></td>
     <td>Unary minus</td>
-    <td><code>-x</code></td>
+    <td><code>#x</code></td>
     <td>Right to left</td>
-    <td><code>-10</code></td>
-    <td><code>-10</code></td>
+    <td><code>#10</code></td>
+    <td><code>#10</code></td>
   </tr>
   <tr>
     <td><code>:</code></td>
-    <td>???</td>
-    <td><code>???</code></td>
-    <td>???</td>
-    <td><code>???</code></td>
-    <td><code>???</code></td>
+    <td>Slice</td>
+    <td><code>x:y</code></td>
+    <td>Left to right</td>
+    <td><code>'potato'[:3]</code></td>
+    <td><code>'pot'</code></td>
   </tr>
   <tr>
     <td><code>==</code></td>
