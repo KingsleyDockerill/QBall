@@ -75,4 +75,60 @@
   </ol>
 </details>
 
+<!-- EXAMPLES-->
+<h2 id="ex">Examples</h2>
+
+> __NOTE:__ Even though it looks simular, these are written in QBall <code>.qball</code>, not python <code>.py</code>.
+
+<!-- HELLO WORLD-->
+<h3 id="hw">Hello World</h3>
+
+<pre>
+out 'Hello world!'
+</pre>
+
+<!-- OUTPUT FUNCTION -->
+<h3 id="of">Output function</h3>
+
+<pre>
+((This will create a function that will output a single argut.))men
+
+$ outarg function
+_outarg a;
+  out a;
+end
+
+$ Output floating points, strings, int, lists
+outarg "Hello, world!"
+outarg 5
+outarg 5.5
+outarg ["Hello, world!", "Hello, again!"]
+</pre>
+
+<!-- OUTPUT ELEMENTS-->
+<h3 id="oe">Output Elements</h3>
+
+<pre>
+((This will output every element in a string or list))
+
+_iterarg a;
+  for i in a;
+    out i;
+  end
+end
+
+iterarg ["Hello, world!" 5 ["Hello" "Hi"] 5.5]
+</pre>
+
+<!-- RUN PYTHON & 8BALL CODE-->
+<h3 id="rpy8bc">Run Python & 8Ball code</h3>
+
+<pre>
+out "Enter some QBall code: " newline=0;
+in a;
+out "Enter some Python code: " newline=0;
+in b;
+qstr a;
+py b
+</pre>
 
