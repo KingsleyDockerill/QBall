@@ -53,8 +53,6 @@
         <li><a href="#using-the-package">Using the package</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -99,18 +97,6 @@ This is an example of how to list things you need to use the software and how to
    QBall.global_add(a=5)
    QBall.evaluate("out a")
    ```
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-_For more examples, please refer to the [Documentation](https://github.com/KingsleyDockerill/QBall/blob/master/documentation.md)_
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](hhttps://github.com/KingsleyDockerill/QBall/issues) for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 ## Contributing
