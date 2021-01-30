@@ -51,7 +51,7 @@
         <li><a href="#ex-rpy8bc">Run Python & 8Ball code</a></li>
       </ul>
     </li>
-    <li><a href="#math-op">Math Operators</a></li>
+    <li><a href="#math">Math</a></li>
     <li><a href="#esc-char">Escape Characters</a></li>
     <li><a href="#comment">Comments</a></li>  
     <li><a href="#funct">Functions</a></li>
@@ -64,7 +64,6 @@
         <li><a href="#in">Input</a></li>
       </ul>
     </li>
-    <li><a href="#semicolon">Semicolons</a></li>
     <li><a href="#data-type">Data types</a></li>
     <li><a href="#esc-char-tbl">Escape character table</a></li>
     <li><a href="#op-tbl">Operator table</a></li>
@@ -82,14 +81,14 @@ Welcome to the offical QBall documentation! To start click one of the links abov
 > __NOTE:__ Even though it looks simular, these are written in QBall <code>.qball</code>, not python <code>.py</code>.
 
 <!-- HELLO WORLD-->
-<h3 id="ex-hw">Hello World</h3>
+<h3 id="ex-hw">Hello World <small><a href="examples/hello-world.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 out 'Hello world!'
 </pre>
 
 <!-- OUTPUT FUNCTION -->
-<h3 id="ex-of">Output function</h3>
+<h3 id="ex-of">Output function <small><a href="examples/output-function.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 ((This will create a function that will output a single argut.))men
@@ -107,7 +106,7 @@ outarg ["Hello, world!", "Hello, again!"]
 </pre>
 
 <!-- OUTPUT ELEMENTS-->
-<h3 id="ex-oe">Output Elements</h3>
+<h3 id="ex-oe">Output Elements <small><a href="examples/output-elements.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 ((This will output every element in a string or list))
@@ -122,7 +121,7 @@ iterarg ["Hello, world!" 5 ["Hello" "Hi"] 5.5]
 </pre>
 
 <!-- RUN PYTHON & 8BALL CODE-->
-<h3 id="ex-rpy8bc">Run Python & 8Ball code</h3>
+<h3 id="ex-rpy8bc">Run Python & 8Ball code <small><a href="examples/output-function.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 out "Enter some QBall code: " newline=0;
