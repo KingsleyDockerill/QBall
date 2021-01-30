@@ -52,7 +52,7 @@
       <ul>
         <li><a href="example.md#hw">Hello World</a></li>
         <li><a href="example.md#of">Output function</a></li>
-        <li><a href="exmaple.md#oe">Output Elements</a></li>
+        <li><a href="example.md#oe">Output Elements</a></li>
         <li><a href="example.md#rpy8bc">Run Python & 8Ball code</a></li>
       </ul>
     </li>
