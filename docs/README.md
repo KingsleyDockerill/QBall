@@ -81,14 +81,14 @@ Welcome to the offical QBall documentation! To start click one of the links abov
 > __NOTE:__ Even though it looks simular, these are written in QBall <code>.qball</code>, not python <code>.py</code>.
 
 <!-- HELLO WORLD-->
-<h3 id="ex-hw">Hello World <small><a href="./example/hello-world.qball">&#60;&#47;&#62;</a></small></h3>
+<h3 id="ex-hw">Hello World <small><a href="../example/hello-world.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 out 'Hello world!'
 </pre>
 
 <!-- OUTPUT FUNCTION -->
-<h3 id="ex-of">Output function <small><a href="./example/output-function.qball">&#60;&#47;&#62;</a></small></h3>
+<h3 id="ex-of">Output function <small><a href="../example/output-function.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 ((This will create a function that will output a single argut.))men
@@ -106,7 +106,7 @@ outarg ["Hello, world!", "Hello, again!"]
 </pre>
 
 <!-- OUTPUT ELEMENTS-->
-<h3 id="ex-oe">Output Elements <small><a href="./example/output-elements.qball">&#60;&#47;&#62;</a></small></h3>
+<h3 id="ex-oe">Output Elements <small><a href="../example/output-elements.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 ((This will output every element in a string or list))
@@ -121,7 +121,7 @@ iterarg ["Hello, world!" 5 ["Hello" "Hi"] 5.5]
 </pre>
 
 <!-- RUN PYTHON & 8BALL CODE-->
-<h3 id="ex-rpy8bc">Run Python & 8Ball code <small><a href="./example/output-function.qball">&#60;&#47;&#62;</a></small></h3>
+<h3 id="ex-rpy8bc">Run Python & 8Ball code <small><a href="../example/output-function.qball">&#60;&#47;&#62;</a></small></h3>
 
 <pre>
 out "Enter some QBall code: " newline=0;
@@ -561,5 +561,3 @@ $ egg!
   </tr>
 </tbody>
 </table>
-
-
