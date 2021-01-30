@@ -1,7 +1,7 @@
 ((This will output every element in a string or list))
 
 _iterarg a;
-  for i in a; ((Same as Python for loop))
+  for i in a;
     out i;
   end
 end

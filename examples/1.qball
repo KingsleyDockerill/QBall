@@ -2,9 +2,8 @@
 This will create a function(outarg) that will output 
 a single argument.))
 
-((The _ is equivelent to def in Python))
 _outarg a;
-  out a; ((Builtin for printing info))
+  out a;
 end $ This can all be done on one line, but for readibility it will be on multiple
 
 $ Support for floating points, strings, ints, and lists
