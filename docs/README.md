@@ -159,7 +159,14 @@ Into this <code>"Jack said \"Hello, world!\""</code>, or without escape characte
 <!-- COMMENTS -->
 <h2 id="comment">Comments</h2>
 
-Comments are started with the dollar sign <code>$</code> character.
+Comments can be used to explain the code and make it more readable.
+It can also be used to prevent execution of code.
+
+Single line comments are started with the dollar sign <code>$</code> character.
+Any text between <code>$</code> and the end of the line are marked as a comment.
+
+Multiline comments are started with <code>((</code> and ended with <code>))</code>.
+Any text between <code>((</code> and <code>))</code> are marked as a comment.
 
 <pre>
 $ Ham
@@ -169,9 +176,18 @@ if 10 > 5;
 else;
   $ Potato
 end
-</pre>
 
-To use multiline comments. <!-- NOT | WIP -->
+$ out "Hello!"
+out "3 + 3 is equal to 9"
+
+((
+  Hello
+  I'm a
+  multi
+  line
+  comment
+))
+</pre>
 
 <!-- FUNCTIONS -->
 <h2 id="funct">Functions</h2>
