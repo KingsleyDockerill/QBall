@@ -542,7 +542,7 @@ $ egg!
   </tr>
   <tr>
     <td><code>in</code></td>
-    <td>???</td>
+    <td>In</td>
     <td><code>x in y</code></td>
     <td>Left to right</td>
     <td><code>"foo" in "foo bar baz"</code></td>
@@ -550,7 +550,7 @@ $ egg!
   </tr>
   <tr>
     <td><code>!in</code></td>
-    <td>???</td>
+    <td>Not in</td>
     <td><code>x !in y</code></td>
     <td>Left to right</td>
     <td><code>"foo" !in "foo bar baz"</code></td>
