@@ -165,7 +165,7 @@ It can also be used to prevent execution of code.
 Single line comments are started with the dollar sign <code>$</code> character.
 Any text between <code>$</code> and the end of the line are marked as a comment.
 
-Multiline comments are started with <code>((</code> and ended with <code>))</code>.
+Multi-line comments are started with <code>((</code> and ended with <code>))</code>.
 Any text between <code>((</code> and <code>))</code> are marked as a comment.
 
 <pre>
@@ -566,5 +566,3 @@ $ egg!
   </tr>
 </tbody>
 </table>
-
-
