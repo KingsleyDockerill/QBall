@@ -1,0 +1,16 @@
+using os; ((You can use standard objects like os using this. QBall also has ReGex and a couple others))
+
+_cls;
+  if os name == "posix"; ((Simple if/else))
+    sys "clear";
+   else;
+    sys "cls";
+  end
+end
+cls;
+out "Hello, world!";
+slp 3;
+cls;
+out "Hello, again!";
+slp 3;
+cls;
