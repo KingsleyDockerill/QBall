@@ -156,33 +156,38 @@ end
 Now you can call this function from anywhere in your program like this:
 ```
 outarg "Hello, world!"
+```
 would output
+```
 Hello, world!
-if and else statements:
+```
+# if and else statements:
 If statement's syntax in QBall are similiar to functions. An example:
+```
 if "Hi" == "Hi";
-$ Code
-    end
-  To use an else statement:
-    if "Hi" != "Hi";
-      $ Code
+   $ Code
+end
+```
+To use an else statement:
+```
+if "Hi" != "Hi";
+   $ Code
 else;
-\$ Code
+   $ Code
 end
 ```
 
 Notice there's only one end in that, after the else statement.
 These are the operators you can use:
-- :
 - ==
 - !=
 - <=
-- \> =
+- \>=
 - \>
-- \> <
-- \> in
-- \> !in
-- \> !
+- <
+- in
+- !in
+- !condition (example if !5 == 6;)
 ---
 QBall Documentation 
 ---
